@@ -24,7 +24,7 @@ public class Cursor : Sprite
     public void SpawnUnit() {
         RigidBody2D unit = (RigidBody2D)UnitScene.Instance();
         Owner.AddChild(unit);
-        unit.Position = this.Position;
+        unit.Position = this.Position + (Vector2.Left*100);
     }
 
     // Called when the node enters the scene tree for the first time.
