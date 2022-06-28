@@ -15,8 +15,8 @@ public class Unit : RigidBody2D
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(float delta)
+	public override void _PhysicsProcess(float delta)
 	{
-		Position += Vector2.Right * speed * delta;
+		this.Position += Vector2.Right * speed * delta;
 	}
 }
