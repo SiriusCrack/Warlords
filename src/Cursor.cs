@@ -6,7 +6,7 @@ public class Cursor : Sprite
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
-    [Export] PackedScene UnitScene;
+    private PackedScene UnitScene = ResourceLoader.Load("res://Scenes/Unit.tscn") as PackedScene;
 
     public void GetInput() {
         if (Input.IsActionJustPressed("spawn")) {
