@@ -7,11 +7,11 @@ public class Cursor : Sprite
     // private int a = 2;
     // private string b = "text";
     private PackedScene UnitScene = ResourceLoader.Load("res://Scenes/Unit.tscn") as PackedScene;
+    private Vector2 Direction = Vector2.Right;
 
     public void GetInput() {
         if (Input.IsActionJustPressed("spawn")) {
             SpawnUnit();
-            GD.Print("spawned");
         }
         if (Input.IsActionJustPressed("down") && Position.y < 940) {
             Position += Vector2.Down * 100;
@@ -22,14 +22,17 @@ public class Cursor : Sprite
     }
 
     public void SpawnUnit() {
-        RigidBody2D unit = (RigidBody2D)UnitScene.Instance();
+        Area2D unit = (Area2D)UnitScene.Instance();
+        unit.Position = this.Position + (Direction*100);
         Owner.AddChild(unit);
-        unit.Position = this.Position + (Vector2.Left*100);
     }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        if (this.Position.x < 100) {
+            Direction = Vector2.Left;
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

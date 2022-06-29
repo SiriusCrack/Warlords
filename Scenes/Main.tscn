@@ -6,5 +6,9 @@
 [node name="Main" type="Node"]
 script = ExtResource( 2 )
 
-[node name="Sprite" parent="." instance=ExtResource( 3 )]
+[node name="RCursor" parent="." instance=ExtResource( 3 )]
+position = Vector2( 1870, 140 )
+rotation = 3.14159
+
+[node name="LCursor" parent="." instance=ExtResource( 3 )]
 position = Vector2( 50, 140 )
