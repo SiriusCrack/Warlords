@@ -3,13 +3,12 @@ using System;
 
 public class Cursor : Sprite
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    private static int[] Positions = new int[] {140, 240, 340, 440, 540, 640, 740, 840, 940};
     private PackedScene UnitScene = ResourceLoader.Load("res://Scenes/Unit.tscn") as PackedScene;
     private Vector2 Direction = Vector2.Right;
+    private Timer SpawnTimer;
 
-    public void GetInput() {
+    private void GetInput() {
         if (Input.IsActionJustPressed("spawn")) {
             SpawnUnit();
         }
@@ -21,15 +20,27 @@ public class Cursor : Sprite
         }
     }
 
-    public void SpawnUnit() {
-        Area2D unit = (Area2D)UnitScene.Instance();
-        unit.Position = this.Position + (Direction*100);
-        Owner.AddChild(unit);
+    private void SpawnUnit() {
+        if (SpawnTimer.IsStopped()) {
+            Area2D unit = (Area2D)UnitScene.Instance();
+            unit.Position = this.Position + (Direction*100);
+            Owner.AddChild(unit);
+            SpawnTimer.Start();
+        }
+    }
+
+    private void AI() {
+        if (SpawnTimer.IsStopped()) {
+            Position = new Vector2 (x: Position.x, y: Positions[GD.Randi()%9]);
+            SpawnUnit();
+        }
     }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        GD.Randomize();
+        SpawnTimer = GetNode<Timer>("SpawnTimer");
         if (this.Position.x < 100) {
             Direction = Vector2.Left;
         }
@@ -38,6 +49,10 @@ public class Cursor : Sprite
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        GetInput();
+        if (Direction == Vector2.Left) {
+            GetInput();
+        } else {
+            AI();
+        }
     }
 }

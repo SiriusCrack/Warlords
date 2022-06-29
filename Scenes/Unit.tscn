@@ -17,5 +17,9 @@ texture = ExtResource( 1 )
 position = Vector2( 15, 0 )
 shape = SubResource( 1 )
 
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 2.0
+
 [connection signal="area_entered" from="." to="." method="OnUnitAreaEntered"]
 [connection signal="area_exited" from="." to="." method="OnUnitAreaExited"]
+[connection signal="timeout" from="AttackTimer" to="." method="OnAttackTimerTimeout"]
