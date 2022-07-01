@@ -49,10 +49,10 @@ public class Cursor : Sprite
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        if (Direction == Vector2.Left) {
+        // if (Direction == Vector2.Left) {
             GetInput();
-        } else {
-            AI();
-        }
+        // } else {
+        //     AI();
+        // }
     }
 }

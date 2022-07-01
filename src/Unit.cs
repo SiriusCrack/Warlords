@@ -11,10 +11,16 @@ public class Unit : Area2D
 	private Array<Unit> AttackUnits = new Array<Unit>();
 	private Vector2 Direction = Vector2.Right;
 	private bool Advancing = true;
+	[Export] public int health;
+	[Export] public int attackDamage;
 	public Side MySide = Side.Left;
 
 	public void TakeDamage(int dmg) {
-		GetParent().RemoveChild(this);
+		if ((health - dmg) > 0) {
+			health -= dmg;
+		} else {
+			GetParent().RemoveChild(this);
+		}
 	}
 
 	private void OnUnitAreaEntered(Unit area) {
@@ -39,7 +45,7 @@ public class Unit : Area2D
 
 	private void OnAttackTimerTimeout() {
 		foreach (Unit unit in AttackUnits) {
-			unit.TakeDamage(1);
+			unit.TakeDamage(attackDamage);
 		}
 	}
 
@@ -49,6 +55,8 @@ public class Unit : Area2D
 		GD.Randomize();
 		AttackTimer = GetNode<Timer>("AttackTimer");
 		AttackTimer.WaitTime = GD.Randf() %(float)3.0;
+		health = (int)(GD.Randi() %50);
+		attackDamage = (int)(GD.Randi() %20);
 		if (this.Position.x > 100) {
 			MySide = Side.Right;
 			Direction = Vector2.Left;
@@ -57,6 +65,9 @@ public class Unit : Area2D
 	}
 
 	public override void _Process(float delta) {
+		if ((Position.x < -110) || (Position.x > 2030)) {
+			GetParent().RemoveChild(this);
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
