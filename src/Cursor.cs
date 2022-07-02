@@ -9,6 +9,8 @@ public class Cursor : Sprite
     private Array<Timer> SpawnTimers = new Array<Timer>();
     [Export] private Unit.Side MySide;
     private Vector2 Direction;
+    [Export] private bool playable;
+    private int AIMove;
 
     private void GetInput() {
         if (Input.IsActionJustPressed("spawn1")) {
@@ -51,13 +53,20 @@ public class Cursor : Sprite
     }
 
     private void AI() {
-        // if (SpawnTimer.IsStopped()) {
-        //     Position = new Vector2 (x: Position.x, y: Positions[GD.Randi()%9]);
-        //     SpawnUnit();
-        // }
+        if (SpawnTimers[AIMove].IsStopped()) {
+            SpawnUnit(AIMove);
+            Position = new Vector2 (Position.x, Positions[(int)(GD.Randi()%9)]);
+            AINewMove();
+        }
+    }
+
+    private void AINewMove() {
+        AIMove = (int)(GD.Randi()%3);
     }
 
     public override void _Ready() {
+        GD.Randomize();
+
         if (MySide == Unit.Side.Left) {
             Direction = Vector2.Left;
         } else {
@@ -80,13 +89,17 @@ public class Cursor : Sprite
             spawnTimersGroup.AddChild(unit);
             SpawnTimers.Add(unit.GetNode<Timer>("SpawnTimer"));
         }
+
+        if(!playable) {
+            AINewMove();
+        }
     }
 
     public override void _Process(float delta) {
-        if (Direction == Vector2.Left) {
+        if (playable) {
             GetInput();
-        }// else {
-        //     AI();
-        // }
+        } else {
+            AI();
+        }
     }
 }
