@@ -29,7 +29,6 @@ public class Cursor : Sprite
     }
 
     private void SpawnUnit(int arg) {
-        GD.Print(SpawnTimers.Count);
         if (SpawnTimers[arg].IsStopped()) {
             Unit unit = UnitScenes[arg].Instance<Unit>();
             unit.GetNode("SpawnTimer").QueueFree();

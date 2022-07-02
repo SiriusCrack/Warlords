@@ -6,8 +6,8 @@ public class Unit : Area2D
 {
 	public enum Side {Left, Right};
 
-	public Timer AttackTimer;
 	public Array<Unit> AttackUnits = new Array<Unit>();
+	public Timer AttackTimer;
 	public Side MySide;
 	public Vector2 Direction;
 	[Export] public bool Advancing = true;
