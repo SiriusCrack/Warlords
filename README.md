@@ -3,5 +3,5 @@ https://siriuscrack.itch.io/warlords-clone
 password: shadow
 
 TODO:
-AI
-make lane array
+*make lane array
+*make unittype scene superobject thingy
