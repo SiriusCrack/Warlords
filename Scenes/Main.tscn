@@ -11,11 +11,20 @@ script = ExtResource( 2 )
 stream = ExtResource( 1 )
 autoplay = true
 
-[node name="LCursor" parent="." instance=ExtResource( 3 )]
+[node name="Left" type="Node" parent="."]
+
+[node name="LCursor" parent="Left" instance=ExtResource( 3 )]
 position = Vector2( 50, 140 )
 playable = true
 
-[node name="RCursor" parent="." instance=ExtResource( 3 )]
+[node name="Units" type="Node" parent="Left"]
+
+[node name="Right" type="Node" parent="."]
+
+[node name="RCursor" parent="Right" instance=ExtResource( 3 )]
 position = Vector2( 1870, 140 )
-scale = Vector2( -0.25, 0.25 )
+rotation = -3.14159
+scale = Vector2( 0.25, -0.25 )
 MySide = 1
+
+[node name="Units" type="Node" parent="Right"]

@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/Unit.cs" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 61, 39 )
+
+[node name="Generic" type="Node"]
+
+[node name="Unit" type="Area2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="Unit"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit"]
+position = Vector2( 15, 0 )
+shape = SubResource( 1 )
+
+[node name="AttackTimer" type="Timer" parent="Unit"]
+wait_time = 100.0
+
+[node name="SpawnTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="area_entered" from="Unit" to="Unit" method="OnUnitAreaEntered"]
+[connection signal="area_exited" from="Unit" to="Unit" method="OnUnitAreaExited"]
+[connection signal="timeout" from="Unit/AttackTimer" to="Unit" method="OnAttackTimerTimeout"]

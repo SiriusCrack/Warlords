@@ -12,6 +12,7 @@ public class Cursor : Sprite
     private Vector2 Direction;
     [Export] private bool playable;
     private int AIMove;
+    private Node SpawnPool;
 
     private void GetInput() {
         if (Input.IsActionJustPressed("spawn1")) {
@@ -47,8 +48,11 @@ public class Cursor : Sprite
 
     private void SpawnUnit(int arg) {
         if (SpawnTimers[arg].IsStopped()) {
-            Unit unit = UnitScenes[arg].Instance<Unit>();
-            unit.GetNode("SpawnTimer").QueueFree();
+            Node unitType = UnitScenes[arg].Instance();
+            Unit unit = unitType.GetNode<Unit>("Unit");
+            unitType.RemoveChild(unit);
+            SpawnPool.AddChild(unit);
+            unitType.QueueFree();
             unit.MySide = MySide;
             if (MySide == Unit.Side.Left) {
                 unit.Direction = Vector2.Right;
@@ -57,7 +61,6 @@ public class Cursor : Sprite
                 unit.Scale = new Vector2 (-1, 1);
             }
             unit.Position = this.Position + (Direction*75);
-            Owner.AddChild(unit);
             SpawnTimers[arg].Start();
             int index = 0;
             foreach (Timer spawnTimer in SpawnTimers) {
@@ -90,6 +93,8 @@ public class Cursor : Sprite
     public override void _Ready() {
         GD.Randomize();
 
+        SpawnPool = GetParent().GetNode("Units");
+
         if (MySide == Unit.Side.Left) {
             Direction = Vector2.Left;
         } else {
@@ -100,17 +105,12 @@ public class Cursor : Sprite
         spawnTimersGroup.Name = "SpawnTimersGroup";
         AddChild(spawnTimersGroup);
         foreach (PackedScene unitScene in UnitScenes) {
-            Unit unit = unitScene.Instance<Unit>();
-            unit.GetNode("Sprite").QueueFree();
-            unit.GetNode("CollisionShape2D").QueueFree();
-            unit.GetNode("AttackTimer").QueueFree();
-            unit.Monitoring = false;
-            unit.Monitorable = false;
-            unit.MySide = MySide;
-            unit.Advancing = false;
-            unit.GlobalPosition = new Vector2(33,-33);
-            spawnTimersGroup.AddChild(unit);
-            SpawnTimers.Add(unit.GetNode<Timer>("SpawnTimer"));
+            Node unitType = unitScene.Instance();
+            Timer spawnTimer = unitType.GetNode<Timer>("SpawnTimer");
+            unitType.RemoveChild(spawnTimer);
+            spawnTimersGroup.AddChild(spawnTimer);
+            unitType.QueueFree();
+            SpawnTimers.Add(spawnTimer);
         }
 
         if(!playable) {
