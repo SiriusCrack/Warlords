@@ -4,10 +4,11 @@ using System;
 
 public class Cursor : Sprite
 {
-    private static int[] Positions = new int[] {140, 240, 340, 440, 540, 640, 740, 840, 940};
+    private static int[] Lanes = new int[] {140, 240, 340, 440, 540, 640, 740, 840, 940};
     [Export] private Array<PackedScene> UnitScenes;
     private Array<Timer> SpawnTimers = new Array<Timer>();
     [Export] private Unit.Side MySide;
+    private int MyLane = 0;
     private Vector2 Direction;
     [Export] private bool playable;
     private int AIMove;
@@ -22,11 +23,25 @@ public class Cursor : Sprite
         if (Input.IsActionJustPressed("spawn3")) {
             SpawnUnit(2);
         }
-        if (Input.IsActionJustPressed("down") && Position.y < 940) {
-            Position += Vector2.Down * 100;
+        if (Input.IsActionJustPressed("up")) {
+            MoveUp();
         }
-        if (Input.IsActionJustPressed("up") && Position.y > 140) {
-            Position += Vector2.Up * 100;
+        if (Input.IsActionJustPressed("down")) {
+            MoveDown();
+        }
+    }
+
+    private void MoveUp() {
+        if (MyLane > 0) {
+            MyLane--;
+            Position = new Vector2(Position.x, Lanes[MyLane]);
+        }
+    }
+
+    private void MoveDown() {
+        if (MyLane < Lanes.Length-1) {
+            MyLane++;
+            Position = new Vector2(Position.x, Lanes[MyLane]);
         }
     }
 
@@ -55,7 +70,15 @@ public class Cursor : Sprite
     private void AI() {
         if (SpawnTimers[AIMove].IsStopped()) {
             SpawnUnit(AIMove);
-            Position = new Vector2 (Position.x, Positions[(int)(GD.Randi()%9)]);
+            int aiLane = (int)(GD.Randi()%9);
+            while (aiLane != MyLane) {
+                if (aiLane < MyLane) {
+                    MoveUp();
+                }
+                if (aiLane > MyLane) {
+                    MoveDown();
+                }
+            }
             AINewMove();
         }
     }
