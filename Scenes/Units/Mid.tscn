@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/Units/Unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/icon.png" type="Texture" id=2]
+
+[node name="Mid" instance=ExtResource( 1 )]
+speed = 75
+health = 50
+attackDamage = 25
+
+[node name="Sprite" parent="." index="0"]
+modulate = Color( 0.00784314, 1, 0, 1 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" parent="." index="1"]
+visible = false
+
+[node name="AttackTimer" parent="." index="2"]
+wait_time = 2.0
+
+[node name="SpawnTimer" parent="." index="3"]
+wait_time = 2.0
