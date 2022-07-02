@@ -7,7 +7,7 @@ public class Cursor : Sprite
     private static int[] Lanes = new int[] {140, 240, 340, 440, 540, 640, 740, 840, 940};
     [Export] private Array<PackedScene> UnitScenes;
     private Array<Timer> SpawnTimers = new Array<Timer>();
-    [Export] private Unit.Side MySide;
+    private Unit.Side MySide;
     private int MyLane = 0;
     private Vector2 Direction;
     [Export] private bool playable;
@@ -54,13 +54,11 @@ public class Cursor : Sprite
             SpawnPool.AddChild(unit);
             unitType.QueueFree();
             unit.MySide = MySide;
-            if (MySide == Unit.Side.Left) {
-                unit.Direction = Vector2.Right;
-            } else {
-                unit.Direction = Vector2.Left;
+            unit.Direction = Direction;
+            if (MySide == Unit.Side.Right) {
                 unit.Scale = new Vector2 (-1, 1);
             }
-            unit.Position = this.Position + (Direction*75);
+            unit.Position = this.Position - (Direction*100);
             SpawnTimers[arg].Start();
             int index = 0;
             foreach (Timer spawnTimer in SpawnTimers) {
@@ -95,10 +93,13 @@ public class Cursor : Sprite
 
         SpawnPool = GetParent().GetNode("Units");
 
-        if (MySide == Unit.Side.Left) {
-            Direction = Vector2.Left;
-        } else {
+        GD.Print(GetParent().Name);
+        if (GetParent().Name == "Left") {
+            MySide = Unit.Side.Left;
             Direction = Vector2.Right;
+        } else {
+            MySide = Unit.Side.Right;
+            Direction = Vector2.Left;
         }
         
         Node spawnTimersGroup = new Node();
