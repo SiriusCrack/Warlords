@@ -9,20 +9,29 @@ public class Cursor : Sprite
     private Array<Timer> SpawnTimers = new Array<Timer>();
     [Export] private Unit.Side MySide;
     private int MyLane = 0;
+    private int UnitSelect = 0;
     private Vector2 Direction;
     [Export] private bool playable;
-    private int AIMove;
     private Node SpawnPool;
 
     private void GetInput() {
-        if (Input.IsActionJustPressed("spawn1")) {
-            SpawnUnit(0);
+        // if (Input.IsActionJustPressed("spawn1")) {
+        //     SpawnUnit(0);
+        // }
+        // if (Input.IsActionJustPressed("spawn2")) {
+        //     SpawnUnit(1);
+        // }
+        // if (Input.IsActionJustPressed("spawn3")) {
+        //     SpawnUnit(2);
+        // }
+        if (Input.IsActionJustPressed("right")) {
+            SelectSpawn(true);
         }
-        if (Input.IsActionJustPressed("spawn2")) {
-            SpawnUnit(1);
+        if (Input.IsActionJustPressed("left")) {
+            SelectSpawn(false);
         }
-        if (Input.IsActionJustPressed("spawn3")) {
-            SpawnUnit(2);
+        if (Input.IsActionJustPressed("spawn")) {
+            SpawnUnit(UnitSelect);
         }
         if (Input.IsActionJustPressed("up")) {
             MoveUp();
@@ -30,6 +39,18 @@ public class Cursor : Sprite
         if (Input.IsActionJustPressed("down")) {
             MoveDown();
         }
+    }
+
+    private void SelectSpawn(bool right) {
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = false;
+        if (right) {
+            UnitSelect++;
+        } else {
+            UnitSelect--;
+        }
+        UnitSelect = UnitSelect %SpawnTimers.Count; //minus 1?
+        UnitSelect = Math.Abs(UnitSelect);
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
     }
 
     private void MoveUp() {
@@ -71,8 +92,8 @@ public class Cursor : Sprite
     }
 
     private void AI() {
-        if (SpawnTimers[AIMove].IsStopped()) {
-            SpawnUnit(AIMove);
+        if (SpawnTimers[UnitSelect].IsStopped()) {
+            SpawnUnit(UnitSelect);
             int aiLane = (int)(GD.Randi()%9);
             while (aiLane != MyLane) {
                 if (aiLane < MyLane) {
@@ -87,7 +108,9 @@ public class Cursor : Sprite
     }
 
     private void AINewMove() {
-        AIMove = (int)(GD.Randi()%3);
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = false;
+        UnitSelect = (int)(GD.Randi()%3);
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
     }
 
     public override void _Ready() {
@@ -112,6 +135,7 @@ public class Cursor : Sprite
             unitType.QueueFree();
             SpawnTimers.Add(spawnTimerUI.GetNode<Timer>("SpawnTimer"));
         }
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
 
         if(!playable) {
             AINewMove();

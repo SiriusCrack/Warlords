@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/Unit.cs" type="Script" id=1]
 [ext_resource path="res://Assets/UnitTimers/Border.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://src/HealthBar.cs" type="Script" id=7]
 [ext_resource path="res://Assets/HealthBars/Background.png" type="Texture" id=8]
 [ext_resource path="res://Assets/HealthBars/Border.png" type="Texture" id=9]
+[ext_resource path="res://Assets/Square.png" type="Texture" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 61, 39 )
@@ -65,12 +66,12 @@ tint_progress = Color( 0, 0.568627, 0.00784314, 1 )
 [node name="Tween" type="Tween" parent="Unit/HealthBar"]
 
 [node name="SpawnTimerUI" type="Control" parent="."]
-margin_right = 64.0
-margin_bottom = 64.0
+margin_right = 67.0
+margin_bottom = 67.0
 rect_min_size = Vector2( 64, 64 )
 script = ExtResource( 3 )
 
-[node name="TextureRect" type="TextureRect" parent="SpawnTimerUI"]
+[node name="Icon" type="TextureRect" parent="SpawnTimerUI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 16.0
@@ -78,10 +79,15 @@ margin_top = 16.0
 margin_right = 16.0
 margin_bottom = 16.0
 rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 5 )
 
 [node name="TextureProgress" type="TextureProgress" parent="SpawnTimerUI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 1.0
+margin_bottom = 1.0
 step = 0.0
 value = 60.0
 texture_over = ExtResource( 2 )
@@ -89,6 +95,16 @@ texture_progress = ExtResource( 4 )
 fill_mode = 3
 
 [node name="Tween" type="Tween" parent="SpawnTimerUI/TextureProgress"]
+
+[node name="Select" type="TextureRect" parent="SpawnTimerUI"]
+visible = false
+modulate = Color( 0, 0, 0, 0.27451 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 189.0
+margin_bottom = 189.0
+rect_scale = Vector2( 0.26, 0.26 )
+texture = ExtResource( 10 )
 
 [node name="SpawnTimer" type="Timer" parent="SpawnTimerUI"]
 one_shot = true
