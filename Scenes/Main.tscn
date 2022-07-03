@@ -14,7 +14,7 @@ autoplay = true
 [node name="Left" type="Node" parent="."]
 
 [node name="LCursor" parent="Left" instance=ExtResource( 3 )]
-position = Vector2( 50, 140 )
+position = Vector2( 50, 180 )
 playable = true
 
 [node name="Units" type="Node" parent="Left"]
@@ -22,7 +22,7 @@ playable = true
 [node name="Right" type="Node" parent="."]
 
 [node name="RCursor" parent="Right" instance=ExtResource( 3 )]
-position = Vector2( 1870, 140 )
+position = Vector2( 1870, 180 )
 rotation = -3.14159
 scale = Vector2( 0.25, -0.25 )
 MySide = 1
