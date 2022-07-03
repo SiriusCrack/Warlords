@@ -1,6 +1,5 @@
-# Release v0.2.1
+# Release v0.3
 https://siriuscrack.itch.io/warlords-clone
-password: shadow
 
 TODO:
 * Attack Animations
