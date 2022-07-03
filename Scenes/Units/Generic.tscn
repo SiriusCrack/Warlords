@@ -1,9 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/Unit.cs" type="Script" id=1]
 [ext_resource path="res://Assets/UnitTimers/Border.png" type="Texture" id=2]
 [ext_resource path="res://src/SpawnTimerUI.cs" type="Script" id=3]
 [ext_resource path="res://Assets/UnitTimers/Progress.png" type="Texture" id=4]
+[ext_resource path="res://Assets/icon.png" type="Texture" id=5]
+[ext_resource path="res://Assets/HealthBars/Progress.png" type="Texture" id=6]
+[ext_resource path="res://src/HealthBar.cs" type="Script" id=7]
+[ext_resource path="res://Assets/HealthBars/Background.png" type="Texture" id=8]
+[ext_resource path="res://Assets/HealthBars/Border.png" type="Texture" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 61, 39 )
@@ -14,6 +19,7 @@ extents = Vector2( 61, 39 )
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="Unit"]
+texture = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit"]
 visible = false
@@ -22,6 +28,41 @@ shape = SubResource( 1 )
 
 [node name="AttackTimer" type="Timer" parent="Unit"]
 wait_time = 100.0
+
+[node name="HealthBar" type="Control" parent="Unit"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+script = ExtResource( 7 )
+
+[node name="Under" type="TextureProgress" parent="Unit/HealthBar"]
+margin_left = -48.0
+margin_top = -48.0
+margin_right = 80.0
+margin_bottom = -32.0
+rect_scale = Vector2( 0.75, 0.75 )
+step = 0.0
+value = 100.0
+texture_under = ExtResource( 8 )
+texture_progress = ExtResource( 6 )
+tint_under = Color( 1, 1, 1, 0.588235 )
+tint_progress = Color( 0.533333, 0.0313726, 0.0313726, 1 )
+
+[node name="Over" type="TextureProgress" parent="Unit/HealthBar"]
+margin_left = -48.0
+margin_top = -48.0
+margin_right = 80.0
+margin_bottom = -32.0
+rect_scale = Vector2( 0.75, 0.75 )
+step = 0.0
+value = 100.0
+texture_over = ExtResource( 9 )
+texture_progress = ExtResource( 6 )
+tint_progress = Color( 0, 0.568627, 0.00784314, 1 )
+
+[node name="Tween" type="Tween" parent="Unit/HealthBar"]
 
 [node name="SpawnTimerUI" type="Control" parent="."]
 margin_right = 64.0

@@ -12,7 +12,6 @@ attackDamage = 10
 
 [node name="Sprite" parent="Unit" index="0"]
 modulate = Color( 0, 1, 0.972549, 1 )
-texture = ExtResource( 3 )
 
 [node name="AttackTimer" parent="Unit" index="2"]
 wait_time = 1.0

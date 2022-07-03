@@ -8,16 +8,19 @@ public class Unit : Area2D
 
 	public Array<Unit> AttackUnits = new Array<Unit>();
 	public Timer AttackTimer;
+	HealthBar HealthBar;
 	public Side MySide;
 	public Vector2 Direction;
 	[Export] public bool Advancing = true;
     [Export] public int speed;
 	[Export] public int health;
+	int MaxHealth;
 	[Export] public int attackDamage;
 
 	public void TakeDamage(int dmg) {
 		if ((health - dmg) > 0) {
 			health -= dmg;
+			HealthBar.UpdateHealth(health);
 		} else {
 			QueueFree();
 		}
@@ -57,6 +60,11 @@ public class Unit : Area2D
 			this.Scale = new Vector2 (-1, 1);
 		}
         AttackTimer = GetNode<Timer>("AttackTimer");
+		HealthBar = GetNode<HealthBar>("HealthBar");
+		GetNode<TextureProgress>("HealthBar/Over").Value = health;
+		GetNode<TextureProgress>("HealthBar/Under").Value = health;
+		GetNode<TextureProgress>("HealthBar/Over").MaxValue = health;
+		GetNode<TextureProgress>("HealthBar/Under").MaxValue = health;
 	}
 
 	public override void _Process(float delta) {
