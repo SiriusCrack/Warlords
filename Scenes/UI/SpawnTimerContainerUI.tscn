@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/UI/GenericSpawnTimerUI.tscn" type="PackedScene" id=1]
+
+[node name="SpawnTimerContainerUI" type="HBoxContainer"]
+margin_right = 1880.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+custom_constants/separation = 10
+
+[node name="GenericSpawnTimerUI" type="Control" parent="." instance=ExtResource( 1 )]
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+
+[node name="GenericSpawnTimerUI2" type="Control" parent="." instance=ExtResource( 1 )]
+margin_left = 74.0
+margin_right = 138.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+
+[node name="GenericSpawnTimerUI3" type="Control" parent="." instance=ExtResource( 1 )]
+margin_left = 148.0
+margin_right = 212.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )

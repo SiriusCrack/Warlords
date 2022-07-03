@@ -4,10 +4,10 @@ using System;
 
 public class Cursor : Sprite
 {
-    private static int[] Lanes = new int[] {140, 240, 340, 440, 540, 640, 740, 840, 940};
+    private static int[] Lanes = new int[] {180, 280, 380, 480, 580, 680, 780, 880, 980};
     [Export] private Array<PackedScene> UnitScenes;
     private Array<Timer> SpawnTimers = new Array<Timer>();
-    private Unit.Side MySide;
+    [Export] private Unit.Side MySide;
     private int MyLane = 0;
     private Vector2 Direction;
     [Export] private bool playable;
@@ -54,11 +54,13 @@ public class Cursor : Sprite
             SpawnPool.AddChild(unit);
             unitType.QueueFree();
             unit.MySide = MySide;
-            unit.Direction = Direction;
-            if (MySide == Unit.Side.Right) {
+            if (MySide == Unit.Side.Left) {
+                unit.Direction = Vector2.Right;
+            } else {
+                unit.Direction = Vector2.Left;
                 unit.Scale = new Vector2 (-1, 1);
             }
-            unit.Position = this.Position - (Direction*100);
+            unit.Position = this.Position + (Direction*75);
             SpawnTimers[arg].Start();
             int index = 0;
             foreach (Timer spawnTimer in SpawnTimers) {
@@ -93,25 +95,22 @@ public class Cursor : Sprite
 
         SpawnPool = GetParent().GetNode("Units");
 
-        GD.Print(GetParent().Name);
-        if (GetParent().Name == "Left") {
-            MySide = Unit.Side.Left;
-            Direction = Vector2.Right;
-        } else {
-            MySide = Unit.Side.Right;
+        Node spawnTimerContainerUI;
+        if (MySide == Unit.Side.Left) {
             Direction = Vector2.Left;
+            spawnTimerContainerUI = Owner.GetNode("UI/SpawnTimerContainerContainerUI/LSpawnTimerContainerUI");
+        } else {
+            Direction = Vector2.Right;
+            spawnTimerContainerUI = Owner.GetNode("UI/SpawnTimerContainerContainerUI/RSpawnTimerContainerUI");
         }
-        
-        Node spawnTimersGroup = new Node();
-        spawnTimersGroup.Name = "SpawnTimersGroup";
-        AddChild(spawnTimersGroup);
+
         foreach (PackedScene unitScene in UnitScenes) {
             Node unitType = unitScene.Instance();
-            Timer spawnTimer = unitType.GetNode<Timer>("SpawnTimer");
-            unitType.RemoveChild(spawnTimer);
-            spawnTimersGroup.AddChild(spawnTimer);
+            Node spawnTimerUI = unitType.GetNode("SpawnTimerUI");
+            unitType.RemoveChild(spawnTimerUI);
+            spawnTimerContainerUI.AddChild(spawnTimerUI);
             unitType.QueueFree();
-            SpawnTimers.Add(spawnTimer);
+            SpawnTimers.Add(spawnTimerUI.GetNode<Timer>("SpawnTimer"));
         }
 
         if(!playable) {
