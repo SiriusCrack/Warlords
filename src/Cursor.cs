@@ -45,11 +45,13 @@ public class Cursor : Sprite
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = false;
         if (right) {
             UnitSelect++;
+            UnitSelect = UnitSelect %SpawnTimers.Count;
         } else {
             UnitSelect--;
+            if (UnitSelect < 0) {
+                UnitSelect = SpawnTimers.Count-1;
+            }
         }
-        UnitSelect = UnitSelect %SpawnTimers.Count; //minus 1?
-        UnitSelect = Math.Abs(UnitSelect);
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
     }
 
