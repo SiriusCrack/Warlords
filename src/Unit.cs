@@ -17,6 +17,35 @@ public class Unit : Area2D
 	int MaxHealth;
 	[Export] public int attackDamage;
 
+	public override void _Ready() {
+		if (MySide == Side.Left) {
+			Direction = Vector2.Right;
+		} else {
+			Direction = Vector2.Left;
+			this.Scale = new Vector2 (-1, 1);
+		}
+        AttackTimer = GetNode<Timer>("AttackTimer");
+		HealthBar = GetNode<HealthBar>("HealthBar");
+		GetNode<TextureProgress>("HealthBar/Over").Value = health;
+		GetNode<TextureProgress>("HealthBar/Under").Value = health;
+		GetNode<TextureProgress>("HealthBar/Over").MaxValue = health;
+		GetNode<TextureProgress>("HealthBar/Under").MaxValue = health;
+	}
+
+	public override void _Process(float delta) {
+		// if ((Position.x < -110) || (Position.x > 2030)) {
+		// 	QueueFree();
+		// }
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _PhysicsProcess(float delta)
+	{
+		if (Advancing) {
+			this.GlobalPosition += Direction * speed * delta;
+		}
+	}
+	
 	public void TakeDamage(int dmg) {
 		if ((health - dmg) > 0) {
 			health -= dmg;
@@ -52,32 +81,4 @@ public class Unit : Area2D
 		}
 	}
 
-	public override void _Ready() {
-		if (MySide == Side.Left) {
-			Direction = Vector2.Right;
-		} else {
-			Direction = Vector2.Left;
-			this.Scale = new Vector2 (-1, 1);
-		}
-        AttackTimer = GetNode<Timer>("AttackTimer");
-		HealthBar = GetNode<HealthBar>("HealthBar");
-		GetNode<TextureProgress>("HealthBar/Over").Value = health;
-		GetNode<TextureProgress>("HealthBar/Under").Value = health;
-		GetNode<TextureProgress>("HealthBar/Over").MaxValue = health;
-		GetNode<TextureProgress>("HealthBar/Under").MaxValue = health;
-	}
-
-	public override void _Process(float delta) {
-		// if ((Position.x < -110) || (Position.x > 2030)) {
-		// 	QueueFree();
-		// }
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(float delta)
-	{
-		if (Advancing) {
-			this.GlobalPosition += Direction * speed * delta;
-		}
-	}
 }

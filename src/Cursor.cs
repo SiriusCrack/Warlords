@@ -4,29 +4,39 @@ using System;
 
 public class Cursor : Sprite
 {
-    //{-400, -300, -200, -100, 0, 100, 200, 300, 400};
-    private Array<float> Lanes = new Array<float>();
-    [Export] private Array<PackedScene> UnitScenes;
-    private Array<Timer> SpawnTimers = new Array<Timer>();
-    [Export] private Unit.Side MySide;
-    private int MyLane = 0;
-    private int UnitSelect = 0;
-    private Vector2 Direction;
-    [Export] private bool playable;
-    private Node SpawnPool;
-    private Timer AITimer;
+    Array<float> Lanes = new Array<float>();
+    [Export] Array<PackedScene> UnitScenes;
+    Array<Timer> SpawnTimers = new Array<Timer>();
+    [Export] Unit.Side MySide;
+    Vector2 Direction;
+    [Export] bool playable;
+    int MyLane = 0;
+    int UnitSelect = 0;
+    Node SpawnPool;
+    Timer AITimer;
     int AILane;
 
+    public override void _Ready() {
+        GD.Randomize();
+        SpawnPool = GetParent().GetNode("Units");
+        AITimer = GetNode<Timer>("AITimer");
+        SetDirection();
+        SetLanes();
+        SetSpawnTimers();
+        if(!playable) {
+            AINewMove();
+        }
+    }
+
+    public override void _Process(float delta) {
+        if (playable) {
+            GetInput();
+        } else if (AITimer.IsStopped()) {
+            AI();
+        }
+    }
+
     private void GetInput() {
-        // if (Input.IsActionJustPressed("spawn1")) {
-        //     SpawnUnit(0);
-        // }
-        // if (Input.IsActionJustPressed("spawn2")) {
-        //     SpawnUnit(1);
-        // }
-        // if (Input.IsActionJustPressed("spawn3")) {
-        //     SpawnUnit(2);
-        // }
         if (Input.IsActionJustPressed("right")) {
             SelectSpawn(true);
         }
@@ -44,20 +54,6 @@ public class Cursor : Sprite
         }
     }
 
-    private void SelectSpawn(bool right) {
-        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = false;
-        if (right) {
-            UnitSelect++;
-            UnitSelect = UnitSelect %SpawnTimers.Count;
-        } else {
-            UnitSelect--;
-            if (UnitSelect < 0) {
-                UnitSelect = SpawnTimers.Count-1;
-            }
-        }
-        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
-    }
-
     private void MoveUp() {
         if (MyLane > 0) {
             MyLane--;
@@ -70,6 +66,19 @@ public class Cursor : Sprite
             MyLane++;
             Position = new Vector2(Position.x, Lanes[MyLane]);
         }
+    }
+    private void SelectSpawn(bool right) {
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = false;
+        if (right) {
+            UnitSelect++;
+            UnitSelect = UnitSelect %SpawnTimers.Count;
+        } else {
+            UnitSelect--;
+            if (UnitSelect < 0) {
+                UnitSelect = SpawnTimers.Count-1;
+            }
+        }
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
     }
 
     private void SpawnUnit(int arg) {
@@ -96,28 +105,15 @@ public class Cursor : Sprite
         }
     }
 
-    private void AI() {
-        if (SpawnTimers[UnitSelect].IsStopped()) {
-            SpawnUnit(UnitSelect);
-            AILane = (int)(GD.Randi()%9);
-            AINewMove();
+    void SetDirection() {
+        if (MySide == Unit.Side.Left) {
+            Direction = Vector2.Left;
+        } else {
+            Direction = Vector2.Right;
         }
-        if (AILane < MyLane) {
-            MoveUp();
-        }
-        if (AILane > MyLane) {
-            MoveDown();
-        }
-        AITimer.Start();
     }
 
-    private void AINewMove() {
-        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = false;
-        UnitSelect = (int)(GD.Randi()%3);
-        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
-    }
-
-    void SetPositions() {
+    void SetLanes() {
         Vector2 displaySize = GetViewport().GetVisibleRect().Size;
         float bottom = displaySize.y * -0.05f;
         float step = (displaySize.y - 100 + bottom) / -9f;
@@ -131,22 +127,13 @@ public class Cursor : Sprite
         this.Position = (new Vector2(cursorGap, Lanes[0]));
     }
 
-    public override void _Ready() {
-        GD.Randomize();
-
-        SpawnPool = GetParent().GetNode("Units");
-
-        AITimer = GetNode<Timer>("AITimer");
-
+    void SetSpawnTimers() {
         Node spawnTimerContainerUI;
         if (MySide == Unit.Side.Left) {
-            Direction = Vector2.Left;
             spawnTimerContainerUI = Owner.GetNode("UI/SpawnTimerContainerContainerUI/LSpawnTimerContainerUI");
         } else {
-            Direction = Vector2.Right;
             spawnTimerContainerUI = Owner.GetNode("UI/SpawnTimerContainerContainerUI/RSpawnTimerContainerUI");
         }
-
         foreach (PackedScene unitScene in UnitScenes) {
             Node unitType = unitScene.Instance();
             Node spawnTimerUI = unitType.GetNode("SpawnTimerUI");
@@ -156,19 +143,27 @@ public class Cursor : Sprite
             SpawnTimers.Add(spawnTimerUI.GetNode<Timer>("SpawnTimer"));
         }
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
-
-        SetPositions();
-
-        if(!playable) {
-            AINewMove();
-        }
     }
 
-    public override void _Process(float delta) {
-        if (playable) {
-            GetInput();
-        } else if (AITimer.IsStopped()) {
-            AI();
+    private void AINewMove() {
+        GD.Randomize();
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = false;
+        UnitSelect = (int)(GD.Randi()%3);
+        SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
+    }
+
+    private void AI() {
+        if (SpawnTimers[UnitSelect].IsStopped()) {
+            SpawnUnit(UnitSelect);
+            AILane = (int)(GD.Randi()%9);
+            AINewMove();
         }
+        if (AILane < MyLane) {
+            MoveUp();
+        }
+        if (AILane > MyLane) {
+            MoveDown();
+        }
+        AITimer.Start();
     }
 }
