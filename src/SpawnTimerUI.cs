@@ -4,7 +4,7 @@ using System;
 public class SpawnTimerUI : Control {
     TextureProgress TextureProgress;
     Timer SpawnTimer;
-    // Tween tween;
+    
     float ProgressValue;
     public override void _Ready() {
         TextureProgress = GetNode<TextureProgress>("TextureProgress");

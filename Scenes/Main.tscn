@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Assets/soundtrack.ogg" type="AudioStream" id=1]
 [ext_resource path="res://src/Main.cs" type="Script" id=2]
 [ext_resource path="res://Scenes/Cursor.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/UI/TouchInput.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/Score.cs" type="Script" id=5]
+[ext_resource path="res://Scenes/EndGame/Victory.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/EndGame/Defeat.tscn" type="PackedScene" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 50, 540 )
@@ -17,6 +19,8 @@ bg_color = Color( 1, 0, 0, 1 )
 
 [node name="Main" type="Node"]
 script = ExtResource( 2 )
+Victory = ExtResource( 6 )
+Defeat = ExtResource( 7 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 1 )
@@ -120,3 +124,4 @@ visible = false
 
 [connection signal="area_entered" from="Left/LGoal" to="UI/VBoxContainer/Score" method="OnLGoalEntered"]
 [connection signal="area_entered" from="Right/RGoal" to="UI/VBoxContainer/Score" method="OnRGoalEntered"]
+[connection signal="Win" from="UI/VBoxContainer/Score" to="." method="OnWin"]
