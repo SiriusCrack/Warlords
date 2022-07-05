@@ -130,9 +130,9 @@ public class Cursor : Sprite
     void SetSpawnTimers() {
         Node spawnTimerContainerUI;
         if (MySide == Unit.Side.Left) {
-            spawnTimerContainerUI = Owner.GetNode("UI/SpawnTimerContainerContainerUI/LSpawnTimerContainerUI");
+            spawnTimerContainerUI = Owner.GetNode("UI/VBoxContainer/MarginContainer/HBoxContainer/LSpawnTimerContainerUI");
         } else {
-            spawnTimerContainerUI = Owner.GetNode("UI/SpawnTimerContainerContainerUI/RSpawnTimerContainerUI");
+            spawnTimerContainerUI = Owner.GetNode("UI/VBoxContainer/MarginContainer/HBoxContainer/RSpawnTimerContainerUI");
         }
         foreach (PackedScene unitScene in UnitScenes) {
             Node unitType = unitScene.Instance();
