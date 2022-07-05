@@ -7,3 +7,4 @@ TODO:
 * rework touch UI
 * add animations
 * add unti variation
+* add sounds
