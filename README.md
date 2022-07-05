@@ -1,4 +1,4 @@
-# Release v0.3
+# Release v0.4
 https://siriuscrack.itch.io/warlords-clone
 
 TODO:
