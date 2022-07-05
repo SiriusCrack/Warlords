@@ -12,7 +12,7 @@
 [ext_resource path="res://Assets/Square.png" type="Texture" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 61, 39 )
+extents = Vector2( 38, 3 )
 
 [node name="Generic" type="Node"]
 
@@ -23,8 +23,7 @@ script = ExtResource( 1 )
 texture = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit"]
-visible = false
-position = Vector2( 15, 0 )
+position = Vector2( 38, 0 )
 shape = SubResource( 1 )
 
 [node name="AttackTimer" type="Timer" parent="Unit"]

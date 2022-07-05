@@ -4,7 +4,8 @@ using System;
 
 public class Cursor : Sprite
 {
-    private static int[] Lanes = new int[] {180, 280, 380, 480, 580, 680, 780, 880, 980};
+    //{-400, -300, -200, -100, 0, 100, 200, 300, 400};
+    private Array<float> Lanes = new Array<float>();
     [Export] private Array<PackedScene> UnitScenes;
     private Array<Timer> SpawnTimers = new Array<Timer>();
     [Export] private Unit.Side MySide;
@@ -63,7 +64,7 @@ public class Cursor : Sprite
     }
 
     private void MoveDown() {
-        if (MyLane < Lanes.Length-1) {
+        if (MyLane < Lanes.Count-1) {
             MyLane++;
             Position = new Vector2(Position.x, Lanes[MyLane]);
         }
@@ -83,7 +84,7 @@ public class Cursor : Sprite
                 unit.Direction = Vector2.Left;
                 unit.Scale = new Vector2 (-1, 1);
             }
-            unit.Position = this.Position + (Direction*75);
+            unit.GlobalPosition = this.GlobalPosition + (Direction * 75);
             SpawnTimers[arg].Start();
             int index = 0;
             foreach (Timer spawnTimer in SpawnTimers) {
@@ -115,6 +116,22 @@ public class Cursor : Sprite
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
     }
 
+    void SetPositions() {
+        Vector2 displaySize = GetViewport().GetVisibleRect().Size;
+        float bottom = displaySize.y * -0.05f;
+        float step = (displaySize.y - 100 + bottom) / -9f;
+        GD.Print(step);
+        for (float i = 8; i > -1; i--) {
+            Lanes.Add(bottom + (step*i));
+        }
+        GD.Print(Lanes);
+        float cursorGap = displaySize.x*0.03f;
+        if (MySide == Unit.Side.Right) {
+            cursorGap = cursorGap * -1f;
+        }
+        this.Position = (new Vector2(cursorGap, Lanes[0]));
+    }
+
     public override void _Ready() {
         GD.Randomize();
 
@@ -138,6 +155,8 @@ public class Cursor : Sprite
             SpawnTimers.Add(spawnTimerUI.GetNode<Timer>("SpawnTimer"));
         }
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
+
+        SetPositions();
 
         if(!playable) {
             AINewMove();

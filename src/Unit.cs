@@ -68,9 +68,9 @@ public class Unit : Area2D
 	}
 
 	public override void _Process(float delta) {
-		if ((Position.x < -110) || (Position.x > 2030)) {
-			QueueFree();
-		}
+		// if ((Position.x < -110) || (Position.x > 2030)) {
+		// 	QueueFree();
+		// }
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
