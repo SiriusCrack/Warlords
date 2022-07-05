@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/TouchButtons/Directional/Pressed.png" type="Texture" id=1]
 [ext_resource path="res://Assets/TouchButtons/Button/Button.png" type="Texture" id=2]
 [ext_resource path="res://Assets/TouchButtons/Directional/Button.png" type="Texture" id=3]
 [ext_resource path="res://Assets/TouchButtons/Button/Pressed.png" type="Texture" id=4]
+[ext_resource path="res://src/TouchInput.cs" type="Script" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 38, 30.5 )
@@ -17,6 +18,7 @@ extents = Vector2( 38, 30.5 )
 [node name="TouchInput" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 5 )
 
 [node name="Lanes" type="Control" parent="."]
 anchor_top = 0.5
@@ -25,9 +27,9 @@ anchor_bottom = 0.5
 [node name="DUp" type="Control" parent="Lanes"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 305.0
+margin_left = 330.0
 margin_top = -380.0
-margin_right = 685.0
+margin_right = 710.0
 margin_bottom = -75.0
 rect_rotation = 90.0
 
@@ -38,13 +40,13 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 1 )
 action = "up"
-visibility_mode = 1
 
 [node name="DDown" type="Control" parent="Lanes"]
 anchor_top = 0.5
 anchor_bottom = 0.5
+margin_left = 25.0
 margin_top = 380.0
-margin_right = 380.0
+margin_right = 405.0
 margin_bottom = 685.0
 rect_rotation = -90.0
 
@@ -55,7 +57,6 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 1 )
 action = "down"
-visibility_mode = 1
 
 [node name="SpawnControls" type="Control" parent="."]
 anchor_left = 1.0
@@ -76,7 +77,6 @@ normal = ExtResource( 2 )
 pressed = ExtResource( 4 )
 shape = SubResource( 2 )
 action = "spawn"
-visibility_mode = 1
 
 [node name="SRight" type="Control" parent="SpawnControls"]
 modulate = Color( 1, 1, 1, 0.392157 )
@@ -94,7 +94,6 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 3 )
 action = "right"
-visibility_mode = 1
 
 [node name="SLeft" type="Control" parent="SpawnControls"]
 modulate = Color( 1, 1, 1, 0.392157 )
@@ -111,4 +110,3 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 3 )
 action = "left"
-visibility_mode = 1

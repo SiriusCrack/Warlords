@@ -14,6 +14,8 @@ public class Cursor : Sprite
     private Vector2 Direction;
     [Export] private bool playable;
     private Node SpawnPool;
+    private Timer AITimer;
+    int AILane;
 
     private void GetInput() {
         // if (Input.IsActionJustPressed("spawn1")) {
@@ -97,17 +99,16 @@ public class Cursor : Sprite
     private void AI() {
         if (SpawnTimers[UnitSelect].IsStopped()) {
             SpawnUnit(UnitSelect);
-            int aiLane = (int)(GD.Randi()%9);
-            while (aiLane != MyLane) {
-                if (aiLane < MyLane) {
-                    MoveUp();
-                }
-                if (aiLane > MyLane) {
-                    MoveDown();
-                }
-            }
+            AILane = (int)(GD.Randi()%9);
             AINewMove();
         }
+        if (AILane < MyLane) {
+            MoveUp();
+        }
+        if (AILane > MyLane) {
+            MoveDown();
+        }
+        AITimer.Start();
     }
 
     private void AINewMove() {
@@ -120,11 +121,9 @@ public class Cursor : Sprite
         Vector2 displaySize = GetViewport().GetVisibleRect().Size;
         float bottom = displaySize.y * -0.05f;
         float step = (displaySize.y - 100 + bottom) / -9f;
-        GD.Print(step);
         for (float i = 8; i > -1; i--) {
             Lanes.Add(bottom + (step*i));
         }
-        GD.Print(Lanes);
         float cursorGap = displaySize.x*0.03f;
         if (MySide == Unit.Side.Right) {
             cursorGap = cursorGap * -1f;
@@ -136,6 +135,8 @@ public class Cursor : Sprite
         GD.Randomize();
 
         SpawnPool = GetParent().GetNode("Units");
+
+        AITimer = GetNode<Timer>("AITimer");
 
         Node spawnTimerContainerUI;
         if (MySide == Unit.Side.Left) {
@@ -166,7 +167,7 @@ public class Cursor : Sprite
     public override void _Process(float delta) {
         if (playable) {
             GetInput();
-        } else {
+        } else if (AITimer.IsStopped()) {
             AI();
         }
     }
