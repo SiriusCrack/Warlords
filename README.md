@@ -2,5 +2,3 @@
 https://siriuscrack.itch.io/warlords-clone
 
 TODO:
-* Attack Animations
-* AI Move Timer

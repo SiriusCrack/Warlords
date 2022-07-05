@@ -40,6 +40,7 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 1 )
 action = "up"
+visibility_mode = 1
 
 [node name="DDown" type="Control" parent="Lanes"]
 anchor_top = 0.5
@@ -57,6 +58,7 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 1 )
 action = "down"
+visibility_mode = 1
 
 [node name="SpawnControls" type="Control" parent="."]
 anchor_left = 1.0
@@ -77,6 +79,7 @@ normal = ExtResource( 2 )
 pressed = ExtResource( 4 )
 shape = SubResource( 2 )
 action = "spawn"
+visibility_mode = 1
 
 [node name="SRight" type="Control" parent="SpawnControls"]
 modulate = Color( 1, 1, 1, 0.392157 )
@@ -94,6 +97,7 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 3 )
 action = "right"
+visibility_mode = 1
 
 [node name="SLeft" type="Control" parent="SpawnControls"]
 modulate = Color( 1, 1, 1, 0.392157 )
@@ -110,3 +114,4 @@ normal = ExtResource( 3 )
 pressed = ExtResource( 1 )
 shape = SubResource( 3 )
 action = "left"
+visibility_mode = 1
