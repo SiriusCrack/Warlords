@@ -97,22 +97,6 @@ public class Unit : KinematicBody2D
 		}
 	}
 
-	// private void OnUnitAreaExited(Area2D area) {
-	// 	int enemies = 0;
-	// 	foreach (Area2D collision in AttackRange.GetOverlappingAreas()) {
-	// 		if (collision.GetParent<Unit>().MySide != MySide) {
-	// 			enemies++;
-	// 			Advancing = false;
-	// 		}
-	// 	}
-	// 	GD.Print(enemies, Advancing);
-	// 	if (Advancing == false && enemies == 0) {
-	// 		Advancing = true;
-	// 		AttackTimer.Stop();
-	// 		AnimationPlayer.Play("Walking");
-	// 	}
-	// }
-
 	private void OnAttackTimerTimeout() {
 		Attack();
 	}

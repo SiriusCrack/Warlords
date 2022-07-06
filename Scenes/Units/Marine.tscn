@@ -213,5 +213,5 @@ margin_bottom = 33.5
 rect_scale = Vector2( 1, 1 )
 texture = ExtResource( 2 )
 
-[node name="SpawnTimer" parent="SpawnTimerUI" index="3"]
+[node name="SpawnTimer" parent="SpawnTimerUI" index="4"]
 wait_time = 0.7

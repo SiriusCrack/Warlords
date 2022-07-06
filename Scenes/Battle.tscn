@@ -117,7 +117,6 @@ custom_constants/separation = 10
 alignment = 2
 
 [node name="TouchInput" parent="." instance=ExtResource( 7 )]
-visible = false
 
 [connection signal="area_entered" from="Left/LGoal" to="UI/VBoxContainer/Score" method="OnLGoalEntered"]
 [connection signal="area_entered" from="Right/RGoal" to="UI/VBoxContainer/Score" method="OnRGoalEntered"]

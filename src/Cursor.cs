@@ -81,7 +81,7 @@ public class Cursor : Sprite
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
     }
 
-    private void SpawnUnit(int arg) {
+    public void SpawnUnit(int arg) {
         if (SpawnTimers[arg].IsStopped()) {
             Node unitType = UnitScenes[arg].Instance();
             Unit unit = unitType.GetNode<Unit>("Unit");
@@ -129,17 +129,22 @@ public class Cursor : Sprite
 
     void SetSpawnTimers() {
         Node spawnTimerContainerUI;
+        Unit.Side side;
         if (MySide == Unit.Side.Left) {
             spawnTimerContainerUI = Owner.GetNode("UI/VBoxContainer/MarginContainer/HBoxContainer/LSpawnTimerContainerUI");
         } else {
             spawnTimerContainerUI = Owner.GetNode("UI/VBoxContainer/MarginContainer/HBoxContainer/RSpawnTimerContainerUI");
         }
+        int addr = 0;
         foreach (PackedScene unitScene in UnitScenes) {
             Node unitType = unitScene.Instance();
-            Node spawnTimerUI = unitType.GetNode("SpawnTimerUI");
+            SpawnTimerUI spawnTimerUI = unitType.GetNode<SpawnTimerUI>("SpawnTimerUI");
             unitType.RemoveChild(spawnTimerUI);
             spawnTimerContainerUI.AddChild(spawnTimerUI);
             unitType.QueueFree();
+            spawnTimerUI.MyCursor = this;
+            spawnTimerUI.TimerAddress = addr;
+            addr++;
             SpawnTimers.Add(spawnTimerUI.GetNode<Timer>("SpawnTimer"));
         }
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
