@@ -9,7 +9,7 @@ public class Score : ProgressBar {
     }
 
     void OnLGoalEntered(Area2D area) {
-        Unit unit = (Unit)area;
+        Unit unit = area.GetParent<Unit>();
         if (unit.MySide == Unit.Side.Right) {
             Value -= unit.health;
             unit.QueueFree();
@@ -20,7 +20,7 @@ public class Score : ProgressBar {
     }
 
     void OnRGoalEntered(Area2D area) {
-        Unit unit = (Unit)area;
+        Unit unit = area.GetParent<Unit>();
         if (unit.MySide == Unit.Side.Left) {
             Value += unit.health;
             unit.QueueFree();

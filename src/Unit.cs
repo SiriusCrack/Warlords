@@ -2,20 +2,22 @@ using Godot;
 using Godot.Collections;
 using System;
 
-public class Unit : Area2D
+public class Unit : KinematicBody2D
 {
 	public enum Side {Left, Right};
 
-	public Array<Unit> AttackUnits = new Array<Unit>();
-	public Timer AttackTimer;
-	HealthBar HealthBar;
+	int enemies;
+	Timer AttackTimer;
+	protected HealthBar HealthBar;
+	protected AnimationPlayer AnimationPlayer;
+	Area2D AttackRange;
 	public Side MySide;
 	public Vector2 Direction;
-	[Export] public bool Advancing = true;
-    [Export] public int speed;
+	[Export] bool Advancing = true;
+    [Export] int speed;
 	[Export] public int health;
 	int MaxHealth;
-	[Export] public int attackDamage;
+	[Export] int attackDamage;
 
 	public override void _Ready() {
 		if (MySide == Side.Left) {
@@ -26,24 +28,47 @@ public class Unit : Area2D
 		}
         AttackTimer = GetNode<Timer>("AttackTimer");
 		HealthBar = GetNode<HealthBar>("HealthBar");
+		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		AttackRange = GetNode<Area2D>("Attack");
 		GetNode<TextureProgress>("HealthBar/Over").Value = health;
 		GetNode<TextureProgress>("HealthBar/Under").Value = health;
 		GetNode<TextureProgress>("HealthBar/Over").MaxValue = health;
 		GetNode<TextureProgress>("HealthBar/Under").MaxValue = health;
+		AnimationPlayer.Play("Walking");
 	}
 
-	public override void _Process(float delta) {
-		// if ((Position.x < -110) || (Position.x > 2030)) {
-		// 	QueueFree();
-		// }
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(float delta)
-	{
+	public override void _PhysicsProcess(float delta) {
 		if (Advancing) {
 			this.GlobalPosition += Direction * speed * delta;
 		}
+	}
+
+	public override void _Process(float delta) {
+		if (Advancing == false) {
+			enemies = 0;
+			foreach (Area2D collision in AttackRange.GetOverlappingAreas()) {
+				if (collision.GetParent<Unit>().MySide != MySide) {
+					enemies++;
+				}
+			}
+			if (enemies == 0) {
+				Advancing = true;
+				AttackTimer.Stop();
+				AnimationPlayer.Play("Walking");
+			}
+		}
+	}
+
+	void Attack() {
+		foreach (Area2D unit in AttackRange.GetOverlappingAreas()) {
+			if(unit.GetParent<Unit>().MySide != MySide) {
+				unit.GetParent<Unit>().TakeDamage(attackDamage);
+			}
+		}
+	}
+
+	void Die() {
+		GetNode<Area2D>("Body").QueueFree();
 	}
 	
 	public void TakeDamage(int dmg) {
@@ -51,34 +76,37 @@ public class Unit : Area2D
 			health -= dmg;
 			HealthBar.UpdateHealth(health);
 		} else {
-			QueueFree();
+			health = 0;
+			HealthBar.UpdateHealth(health);
+			AnimationPlayer.Play("Dying");
 		}
 	}
 
 	private void OnUnitAreaEntered(Area2D area) {
-		if (((Unit)area).MySide != MySide) {
-			if (AttackUnits.Count < 1) {
-				Advancing = false;
-				AttackTimer.Start();
-			}
-			AttackUnits.Add((Unit)area);
+		if (Advancing == true && area.GetParent<Unit>().MySide != MySide) {
+			Advancing = false;
+			AttackTimer.Start();
+			AnimationPlayer.Play("Attacking");
 		}
 	}
 
-	private void OnUnitAreaExited(Area2D area) {
-		if (AttackUnits.Contains((Unit)area)) {
-			AttackUnits.Remove((Unit)area);
-			if (AttackUnits.Count < 1) {
-				Advancing = true;
-				AttackTimer.Stop();
-			}
-		}
-	}
+	// private void OnUnitAreaExited(Area2D area) {
+	// 	int enemies = 0;
+	// 	foreach (Area2D collision in AttackRange.GetOverlappingAreas()) {
+	// 		if (collision.GetParent<Unit>().MySide != MySide) {
+	// 			enemies++;
+	// 			Advancing = false;
+	// 		}
+	// 	}
+	// 	GD.Print(enemies, Advancing);
+	// 	if (Advancing == false && enemies == 0) {
+	// 		Advancing = true;
+	// 		AttackTimer.Stop();
+	// 		AnimationPlayer.Play("Walking");
+	// 	}
+	// }
 
 	private void OnAttackTimerTimeout() {
-		foreach (Unit unit in AttackUnits) {
-			unit.TakeDamage(attackDamage);
-		}
+		Attack();
 	}
-
 }
