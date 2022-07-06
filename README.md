@@ -3,6 +3,4 @@ https://siriuscrack.itch.io/warlords-clone
 
 TODO:
 * rework touch UI
-* add animations
-* add unit variation
 * add sounds
