@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Assets/soundtrack.ogg" type="AudioStream" id=1]
 [ext_resource path="res://src/Main.cs" type="Script" id=2]
@@ -7,9 +7,6 @@
 [ext_resource path="res://src/Score.cs" type="Script" id=5]
 [ext_resource path="res://Scenes/EndGame/Victory.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/EndGame/Defeat.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Scenes/Units/Strong.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Scenes/Units/Mid.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Scenes/Units/Weak.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Scenes/Units/Marine.tscn" type="PackedScene" id=11]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -44,7 +41,7 @@ shape = SubResource( 1 )
 
 [node name="LCursor" parent="Left" instance=ExtResource( 3 )]
 position = Vector2( 50, -400 )
-UnitScenes = [ ExtResource( 10 ), ExtResource( 9 ), ExtResource( 8 ), ExtResource( 11 ) ]
+UnitScenes = [ ExtResource( 11 ) ]
 playable = true
 
 [node name="Units" type="Node" parent="Left"]

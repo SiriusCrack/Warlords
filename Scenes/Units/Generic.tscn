@@ -50,6 +50,8 @@ anims/Attacking = SubResource( 4 )
 anims/Dying = SubResource( 3 )
 anims/Walking = SubResource( 5 )
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Unit"]
+
 [node name="Sprite" type="Sprite" parent="Unit"]
 texture = ExtResource( 5 )
 
@@ -65,9 +67,6 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/Attack"]
 position = Vector2( 22.5, 0 )
 shape = SubResource( 1 )
-
-[node name="AttackTimer" type="Timer" parent="Unit"]
-wait_time = 100.0
 
 [node name="HealthBar" type="Control" parent="Unit"]
 visible = false
@@ -103,6 +102,9 @@ texture_progress = ExtResource( 6 )
 tint_progress = Color( 0, 0.568627, 0.00784314, 1 )
 
 [node name="Tween" type="Tween" parent="Unit/HealthBar"]
+
+[node name="AttackTimer" type="Timer" parent="Unit"]
+wait_time = 100.0
 
 [node name="SpawnTimerUI" type="Control" parent="."]
 margin_right = 67.0

@@ -10,6 +10,7 @@ public class Unit : KinematicBody2D
 	Timer AttackTimer;
 	protected HealthBar HealthBar;
 	protected AnimationPlayer AnimationPlayer;
+	protected AudioStreamPlayer AudioStreamPlayer;
 	Area2D AttackRange;
 	public Side MySide;
 	public Vector2 Direction;
@@ -18,8 +19,10 @@ public class Unit : KinematicBody2D
 	[Export] public int health;
 	int MaxHealth;
 	[Export] int attackDamage;
+	bool Dead = false;
 
 	public override void _Ready() {
+		GD.Randomize();
 		if (MySide == Side.Left) {
 			Direction = Vector2.Right;
 		} else {
@@ -29,6 +32,7 @@ public class Unit : KinematicBody2D
         AttackTimer = GetNode<Timer>("AttackTimer");
 		HealthBar = GetNode<HealthBar>("HealthBar");
 		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		AudioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
 		AttackRange = GetNode<Area2D>("Attack");
 		GetNode<TextureProgress>("HealthBar/Over").Value = health;
 		GetNode<TextureProgress>("HealthBar/Under").Value = health;
@@ -44,17 +48,19 @@ public class Unit : KinematicBody2D
 	}
 
 	public override void _Process(float delta) {
-		if (Advancing == false) {
-			enemies = 0;
-			foreach (Area2D collision in AttackRange.GetOverlappingAreas()) {
-				if (collision.GetParent<Unit>().MySide != MySide) {
-					enemies++;
+		if (!Dead) {
+			if (Advancing == false) {
+				enemies = 0;
+				foreach (Area2D collision in AttackRange.GetOverlappingAreas()) {
+					if (collision.GetParent<Unit>().MySide != MySide) {
+						enemies++;
+					}
 				}
-			}
-			if (enemies == 0) {
-				Advancing = true;
-				AttackTimer.Stop();
-				AnimationPlayer.Play("Walking");
+				if (enemies == 0) {
+					Advancing = true;
+					AttackTimer.Stop();
+					AnimationPlayer.Play("Walking");
+				}
 			}
 		}
 	}
@@ -68,6 +74,7 @@ public class Unit : KinematicBody2D
 	}
 
 	void Die() {
+		Dead = true;
 		GetNode<Area2D>("Body").QueueFree();
 	}
 	

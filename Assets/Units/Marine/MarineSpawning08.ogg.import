@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/MarineSpawning08.ogg-a817941da10a9c85a56c56db9ba9ec60.oggstr"
+
+[deps]
+
+source_file="res://Assets/Units/Marine/MarineSpawning08.ogg"
+dest_files=[ "res://.import/MarineSpawning08.ogg-a817941da10a9c85a56c56db9ba9ec60.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
