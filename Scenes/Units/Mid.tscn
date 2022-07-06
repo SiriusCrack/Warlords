@@ -5,14 +5,14 @@
 [node name="Mid" instance=ExtResource( 1 )]
 
 [node name="Unit" parent="." index="0"]
-speed = 75
+speed = 60
 health = 50
 attackDamage = 25
 
-[node name="Sprite" parent="Unit" index="0"]
+[node name="Sprite" parent="Unit" index="2"]
 modulate = Color( 0, 1, 0.0156863, 1 )
 
-[node name="AttackTimer" parent="Unit" index="2"]
+[node name="AttackTimer" parent="Unit" index="6"]
 wait_time = 1.0
 
 [node name="Icon" parent="SpawnTimerUI" index="0"]

@@ -9,7 +9,7 @@ public class Cursor : Sprite
     Array<Timer> SpawnTimers = new Array<Timer>();
     [Export] Unit.Side MySide;
     Vector2 Direction;
-    [Export] bool playable;
+    [Export] public bool playable;
     int MyLane = 0;
     int UnitSelect = 0;
     Node SpawnPool;

@@ -9,10 +9,10 @@ speed = 100
 health = 20
 attackDamage = 10
 
-[node name="Sprite" parent="Unit" index="0"]
+[node name="Sprite" parent="Unit" index="2"]
 modulate = Color( 0, 1, 0.972549, 1 )
 
-[node name="AttackTimer" parent="Unit" index="2"]
+[node name="AttackTimer" parent="Unit" index="6"]
 wait_time = 1.0
 
 [node name="Icon" parent="SpawnTimerUI" index="0"]

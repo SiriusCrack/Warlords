@@ -2,9 +2,12 @@ using Godot;
 using System;
 
 public class Score : ProgressBar {
-    [Signal] public delegate void Win(Unit.Side side);
+    Cursor RCursor;
+    Cursor LCursor;
 
     public override void _Ready() {
+        RCursor = Owner.GetNode<Cursor>("Right/RCursor");
+        LCursor = Owner.GetNode<Cursor>("Left/LCursor");
         Value = MaxValue/2d;
     }
 
@@ -14,7 +17,7 @@ public class Score : ProgressBar {
             Value -= unit.health;
             unit.QueueFree();
             if (Value <= 0) {
-                EmitSignal("Win", Unit.Side.Right);
+                GameOver(Unit.Side.Left);
             }
         }
     }
@@ -25,8 +28,19 @@ public class Score : ProgressBar {
             Value += unit.health;
             unit.QueueFree();
             if (Value >= MaxValue) {
-                EmitSignal("Win", Unit.Side.Left);
+                GameOver(Unit.Side.Right);
             }
+        }
+    }
+
+    void GameOver(Unit.Side loser) {
+        if (
+            (loser == Unit.Side.Right && LCursor.playable) ||
+            (loser == Unit.Side.Left && RCursor.playable)
+        ) {
+            GetNode<Main>("/root/Main").Victory();
+        } else {
+            GetNode<Main>("/root/Main").Defeat();
         }
     }
 }

@@ -1,0 +1,123 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://src/Score.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/EndGame/Defeat.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/Battle.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/EndGame/Victory.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Cursor.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/UI/TouchInput.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/Units/Marine.tscn" type="PackedScene" id=8]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 50, 540 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0.286275, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 0, 0, 1 )
+
+[node name="Battle" type="Node"]
+script = ExtResource( 3 )
+Victory = ExtResource( 4 )
+Defeat = ExtResource( 2 )
+
+[node name="Left" type="Control" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+
+[node name="LGoal" type="Area2D" parent="Left"]
+position = Vector2( -100, 0 )
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left/LGoal"]
+position = Vector2( -50, -540 )
+shape = SubResource( 1 )
+
+[node name="LCursor" parent="Left" instance=ExtResource( 6 )]
+position = Vector2( 50, -400 )
+UnitScenes = [ ExtResource( 8 ) ]
+playable = true
+
+[node name="Units" type="Node" parent="Left"]
+
+[node name="Right" type="Control" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="RGoal" type="Area2D" parent="Right"]
+position = Vector2( 100, 0 )
+scale = Vector2( -1, 1 )
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right/RGoal"]
+position = Vector2( -50, -540 )
+shape = SubResource( 1 )
+
+[node name="RCursor" parent="Right" instance=ExtResource( 6 )]
+position = Vector2( -50, -400 )
+rotation = -3.14159
+scale = Vector2( 0.25, -0.25 )
+MySide = 1
+
+[node name="Units" type="Node" parent="Right"]
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+anchor_right = 1.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Score" type="ProgressBar" parent="UI/VBoxContainer"]
+margin_right = 1920.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
+max_value = 1000.0
+step = 0.0
+value = 50.0
+percent_visible = false
+script = ExtResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer"]
+margin_top = 24.0
+margin_right = 1920.0
+margin_bottom = 29.0
+custom_constants/margin_right = 15
+custom_constants/margin_top = 5
+custom_constants/margin_left = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer"]
+margin_left = 15.0
+margin_top = 5.0
+margin_right = 1905.0
+margin_bottom = 5.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="LSpawnTimerContainerUI" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_right = 943.0
+size_flags_horizontal = 3
+custom_constants/separation = 10
+
+[node name="RSpawnTimerContainerUI" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 947.0
+margin_right = 1890.0
+size_flags_horizontal = 3
+custom_constants/separation = 10
+alignment = 2
+
+[node name="TouchInput" parent="." instance=ExtResource( 7 )]
+visible = false
+
+[connection signal="area_entered" from="Left/LGoal" to="UI/VBoxContainer/Score" method="OnLGoalEntered"]
+[connection signal="area_entered" from="Right/RGoal" to="UI/VBoxContainer/Score" method="OnRGoalEntered"]
