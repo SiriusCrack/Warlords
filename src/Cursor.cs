@@ -4,7 +4,6 @@ using System;
 
 public class Cursor : Sprite
 {
-    Array<float> Lanes = new Array<float>();
     [Export] Array<PackedScene> UnitScenes;
     Array<Timer> SpawnTimers = new Array<Timer>();
     [Export] Unit.Side MySide;
@@ -16,13 +15,16 @@ public class Cursor : Sprite
     Timer AITimer;
     int AILane;
 
-    public override void _Ready() {
+    public void SetUp() {
         GD.Randomize();
         SpawnPool = GetParent().GetNode("Units");
         AITimer = GetNode<Timer>("AITimer");
         SetDirection();
-        SetLanes();
-        SetSpawnTimers();
+        if (OS.HasTouchscreenUiHint()) {
+            SetSpawnTimersTouch();
+        } else {
+            SetSpawnTimers();
+        }
         if(!playable) {
             AINewMove();
         }
@@ -57,14 +59,14 @@ public class Cursor : Sprite
     private void MoveUp() {
         if (MyLane > 0) {
             MyLane--;
-            Position = new Vector2(Position.x, Lanes[MyLane]);
+            Position = new Vector2(Position.x, GetOwner<Battle>().Lanes[MyLane]);
         }
     }
 
     private void MoveDown() {
-        if (MyLane < Lanes.Count-1) {
+        if (MyLane < GetOwner<Battle>().Lanes.Count-1) {
             MyLane++;
-            Position = new Vector2(Position.x, Lanes[MyLane]);
+            Position = new Vector2(Position.x, GetOwner<Battle>().Lanes[MyLane]);
         }
     }
     private void SelectSpawn(bool right) {
@@ -113,23 +115,8 @@ public class Cursor : Sprite
         }
     }
 
-    void SetLanes() {
-        Vector2 displaySize = GetViewport().GetVisibleRect().Size;
-        float bottom = displaySize.y * -0.05f;
-        float step = (displaySize.y - 100 + bottom) / -9f;
-        for (float i = 8; i > -1; i--) {
-            Lanes.Add(bottom + (step*i));
-        }
-        float cursorGap = displaySize.x*0.03f;
-        if (MySide == Unit.Side.Right) {
-            cursorGap = cursorGap * -1f;
-        }
-        this.Position = (new Vector2(cursorGap, Lanes[0]));
-    }
-
     void SetSpawnTimers() {
         Node spawnTimerContainerUI;
-        Unit.Side side;
         if (MySide == Unit.Side.Left) {
             spawnTimerContainerUI = Owner.GetNode("UI/VBoxContainer/MarginContainer/HBoxContainer/LSpawnTimerContainerUI");
         } else {
@@ -148,6 +135,34 @@ public class Cursor : Sprite
             SpawnTimers.Add(spawnTimerUI.GetNode<Timer>("SpawnTimer"));
         }
         SpawnTimers[UnitSelect].GetNode<TextureRect>("../Select").Visible = true;
+    }
+
+    void SetSpawnTimersTouch() {
+        if (playable) {
+            Control spawnControlsContainer = Owner.GetNode<Control>("TouchInput/SpawnControls/HBoxContainer");
+            // spawnControlsContainer.RectScale *= new Vector2(1.25f, 1.25f);
+            int addr = UnitScenes.Count-1;
+            foreach (PackedScene unitScene in UnitScenes) {
+                Node unitType = UnitScenes[addr].Instance();
+                SpawnTimerUI spawnTimerUI = unitType.GetNode<SpawnTimerUI>("SpawnTimerUI");
+
+                spawnTimerUI.RectScale *= new Vector2(1.25f, 1.25f);
+                unitType.RemoveChild(spawnTimerUI);
+                spawnControlsContainer.AddChild(spawnTimerUI);
+                unitType.QueueFree();
+                spawnTimerUI.MyCursor = this;
+                spawnTimerUI.TimerAddress = addr;
+                addr--;
+                SpawnTimers.Add(spawnTimerUI.GetNode<Timer>("SpawnTimer"));
+            };
+        } else {
+            if (MySide == Unit.Side.Left) {
+                Owner.GetNode<Control>("UI/VBoxContainer/MarginContainer/HBoxContainer/LSpawnTimerContainerUI").Visible = false;
+            } else {
+                Owner.GetNode<Control>("UI/VBoxContainer/MarginContainer/HBoxContainer/RSpawnTimerContainerUI").Visible = false;
+            }
+            SetSpawnTimers();
+        }
     }
 
     private void AINewMove() {
