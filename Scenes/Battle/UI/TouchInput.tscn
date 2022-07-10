@@ -1,0 +1,97 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Assets/UI/TouchButtons/Directional/Pressed.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/Battle/UI/TouchInput.cs" type="Script" id=2]
+[ext_resource path="res://Assets/UI/TouchButtons/Directional/Button.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/Battle/UI/SpawnTimerContainer.cs" type="Script" id=5]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0.286275, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 38, 30.5 )
+
+[node name="UI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="Score" type="ProgressBar" parent="."]
+anchor_right = 1.0
+margin_bottom = 1.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
+max_value = 1000.0
+step = 0.0
+value = 50.0
+percent_visible = false
+
+[node name="SpawnControls" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -99.9999
+margin_top = -100.0
+margin_right = -49.9999
+margin_bottom = -50.0
+rect_scale = Vector2( 2, 2 )
+custom_constants/margin_right = 50
+custom_constants/margin_bottom = 50
+
+[node name="SpawnTimerContainer" type="HBoxContainer" parent="SpawnControls"]
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource( 2 )
+
+[node name="SpawnTimerContainerAI" type="HBoxContainer" parent="."]
+visible = false
+anchor_top = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 5 )
+
+[node name="Lanes" type="Control" parent="."]
+anchor_top = 0.5
+anchor_bottom = 0.5
+
+[node name="DUp" type="Control" parent="Lanes"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 330.0
+margin_top = -380.0
+margin_right = 710.0
+margin_bottom = -75.0
+rect_rotation = 90.0
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Lanes/DUp"]
+modulate = Color( 1, 1, 1, 0.392157 )
+scale = Vector2( 5, 5 )
+normal = ExtResource( 3 )
+pressed = ExtResource( 1 )
+shape = SubResource( 1 )
+action = "up"
+visibility_mode = 1
+
+[node name="DDown" type="Control" parent="Lanes"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 25.0
+margin_top = 380.0
+margin_right = 405.0
+margin_bottom = 685.0
+rect_rotation = -90.0
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Lanes/DDown"]
+modulate = Color( 1, 1, 1, 0.392157 )
+scale = Vector2( 5, 5 )
+normal = ExtResource( 3 )
+pressed = ExtResource( 1 )
+shape = SubResource( 1 )
+action = "down"
+visibility_mode = 1

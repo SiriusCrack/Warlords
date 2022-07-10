@@ -1,16 +1,26 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://src/Menu.cs" type="Script" id=1]
-[ext_resource path="res://Scenes/Battle.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Menus/Menu.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/Units/Types/Mid.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/UI/BlueButton/Normal.png" type="Texture" id=3]
 [ext_resource path="res://Assets/UI/BlueButton/Hover.png" type="Texture" id=4]
 [ext_resource path="res://Assets/UI/BlueButton/Pressed.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/Units/Types/Marine/Marine.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/Camps/AI/AI.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/Camps/Generic.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/Units/Types/Weak.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/Units/Types/Strong.tscn" type="PackedScene" id=10]
 
 [node name="Menu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-Game = ExtResource( 2 )
+LeftCamp = ExtResource( 8 )
+RightCamp = ExtResource( 8 )
+LeftCampUnits = [ ExtResource( 6 ) ]
+RightCampUnits = [ ExtResource( 9 ), ExtResource( 2 ), ExtResource( 10 ) ]
+IsLeftPlayable = true
+AI = ExtResource( 7 )
 
 [node name="Control" type="Control" parent="."]
 anchor_left = 0.5

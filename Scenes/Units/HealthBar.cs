@@ -12,6 +12,13 @@ public class HealthBar : Control {
         Tween = GetNode<Tween>("Tween");
     }
 
+    public void SetMaxHealth(int health) {
+		UnderBar.Value = health;
+		OverBar.Value = health;
+		UnderBar.MaxValue = health;
+		OverBar.MaxValue = health;
+    }
+
     public void UpdateHealth(int health) {
         if (health < OverBar.MaxValue) {
             Visible = true;

@@ -1,20 +1,16 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/soundtrack.ogg" type="AudioStream" id=1]
-[ext_resource path="res://src/Main.cs" type="Script" id=2]
-[ext_resource path="res://Scenes/Menu.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/Battle.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Main.cs" type="Script" id=2]
+[ext_resource path="res://Scenes/Menus/Menu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Battle/Battle.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/VictoryMusic.ogg" type="AudioStream" id=5]
-[ext_resource path="res://Scenes/EndGame/Victory.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Scenes/EndGame/Defeat.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/DefeatMusic.ogg" type="AudioStream" id=8]
 
 [node name="Main" type="Node"]
 script = ExtResource( 2 )
 StartScene = ExtResource( 3 )
 BattleScene = ExtResource( 4 )
-WinScene = ExtResource( 6 )
-LoseScene = ExtResource( 7 )
 VictoryMusic = ExtResource( 5 )
 DefeatMusic = ExtResource( 8 )
 
