@@ -10,7 +10,7 @@ public class Battle : Node {
     [Export] PackedScene DefaultUI;
     [Export] PackedScene TouchUI;
     public Array<float> Lanes = new Array<float>();
-    public float LaneStep;
+    float LaneStep;
     const int LaneCount = 9;
     UI UI;
 
