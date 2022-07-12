@@ -2,28 +2,28 @@ using Godot;
 using Godot.Collections;
 using System;
 
-public class Unit : KinematicBody2D {
+public class Unit : Node2D {
 	// Stats
 	[Export] public int Health;
-	[Export] protected int Speed;
-	[Export] protected int AttackDamage;
+	[Export] int Speed;
+	[Export] int AttackDamage;
 
 	public Camp Camp;
-	protected Area2D Body;
-	protected Area2D AttackRange;
-	protected HealthBar HealthBar;
-	protected AnimationPlayer AnimationPlayer;
-	protected AudioStreamPlayer SFXPlayer;
-	protected bool Advancing;
-	protected bool Dead = false;
-	protected Vector2 Direction;
+	KinematicBody2D Body;
+	HealthBar HealthBar;
+	AnimationPlayer AnimationPlayer;
+	AudioStreamPlayer SFXPlayer;
+	bool Advancing;
+	bool Dead = false;
+	Vector2 Direction;
+	Weapon Weapon;
 
 	public override void _Ready() {
-		Body = GetNode<Area2D>("Body");
-		AttackRange = GetNode<Area2D>("AttackRange");
+		Body = GetNode<KinematicBody2D>("Body");
 		HealthBar = GetNode<HealthBar>("HealthBar");
-		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		SFXPlayer = GetNode<AudioStreamPlayer>("SFXPlayer");
+		Weapon = GetNode<Weapon>("Sword");
+		AnimationPlayer = Weapon.GetNode<AnimationPlayer>("AnimationPlayer");
 		HealthBar.SetMaxHealth(Health);
 		StartAdvancing();
 	}
@@ -35,7 +35,8 @@ public class Unit : KinematicBody2D {
 	}
 
 	public override void _Process(float delta) {
-		int inRange = AttackRange.GetOverlappingAreas().Count;
+		int inRange = GetNode<Area2D>("Range").GetOverlappingBodies().Count;
+		GD.Print(inRange);
 		if (Advancing && inRange > 0) {
 			StartAttacking();
 		}
@@ -52,6 +53,7 @@ public class Unit : KinematicBody2D {
 			}
 			default: {
 				Direction = Vector2.Left;
+				Scale = new Vector2(Scale.x*-1, Scale.y);
 				break;
 			}
 		}
@@ -61,25 +63,21 @@ public class Unit : KinematicBody2D {
 		switch (side) {
 			case Battle.Side.Left: {
 				for (int i = 16; i < 32; i++) {
-					AttackRange.SetCollisionMaskBit(i, true);
+					Weapon.GetNode<Area2D>("HitBox").SetCollisionMaskBit(i, true);
+					GetNode<Area2D>("Range").SetCollisionMaskBit(i, true);
 				}
 				break;
 			}
 			default: {
 				for (int i = 0; i < 16; i++) {
-					AttackRange.SetCollisionMaskBit(i, true);
+					Weapon.GetNode<Area2D>("HitBox").SetCollisionMaskBit(i, true);
+					GetNode<Area2D>("Range").SetCollisionMaskBit(i, true);
 				}
 				lane += 16;
 				break;
 			}
 		}
 		Body.SetCollisionLayerBit(lane, true);
-	}
-
-	public void Attack() {
-		foreach (Area2D unit in AttackRange.GetOverlappingAreas()) {
-			unit.GetParent<Unit>().TakeDamage(AttackDamage);
-		}
 	}
 
 	public void TakeDamage(int damage) {
@@ -95,17 +93,18 @@ public class Unit : KinematicBody2D {
 
 	void StartAdvancing() {
 		Advancing = true;
-		AnimationPlayer.Play("Advancing");
+		// AnimationPlayer.Play("Advancing");
 	}
 
 	void StartAttacking() {
 		Advancing = false;
-		AnimationPlayer.Play("Attacking");
+		AnimationPlayer.Play("Attack");
+
 	}
 
 	void StartDying() {
 		Dead = true;
-		GetNode<Area2D>("Body").QueueFree();
-		AnimationPlayer.Play("Dying");
+		// GetNode<KinematicBody2D>("Body").QueueFree();
+		QueueFree();
 	}
 }
