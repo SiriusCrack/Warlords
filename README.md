@@ -1,6 +1,5 @@
-# Release v0.4
+# Release v0.6
 https://siriuscrack.itch.io/warlords-clone
 
 TODO:
-* rework touch UI
-* polish menus
+* add final unit sprites / animations / SFX
