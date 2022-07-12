@@ -11,6 +11,7 @@ public class Camp : Control {
     public SpawnTimerContainer SpawnTimerContainer;
     public Cursor Cursor;
     Area2D Goal;
+    float SpawnPoint;
 
     public override void _Ready() {
         Cursor = GetNode<Cursor>("Cursor");
@@ -41,7 +42,7 @@ public class Camp : Control {
             unit.Camp = this;
             unit.SetDirection(Side);
             Battle.Battlefield.AddChild(unit);
-            unit.GlobalPosition = new Vector2(Cursor.GlobalPosition.x-50, Cursor.GlobalPosition.y);
+            unit.GlobalPosition = new Vector2(Cursor.GlobalPosition.x+SpawnPoint, Cursor.GlobalPosition.y);
             unit.SetCollision(Cursor.Lane, Side);
             SpawnTimerContainer.ResetTimer(unitAddress);
         }
@@ -57,12 +58,14 @@ public class Camp : Control {
 				for (int i = 16; i < 32; i++) {
 					Goal.SetCollisionMaskBit(i, true);
 				}
+                SpawnPoint = -100;
 				break;
 			}
 			default: {
 				for (int i = 0; i < 16; i++) {
 					Goal.SetCollisionMaskBit(i, true);
 				}
+                SpawnPoint = 100;
 				break;
 			}
 		}
