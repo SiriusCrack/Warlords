@@ -2,15 +2,30 @@ using Godot;
 using System;
 
 public class AI : Node {
-    public Camp Camp;
-    public int UnitRange;
-    public int LaneRange;
+    Camp Camp;
+    Cursor Cursor;
+    SpawnTimerContainer SpawnTimerContainer;
+    int UnitRange;
+    int LaneRange;
     int UnitSelect;
     int LaneSelect;
-    bool SpawnReady = false;
+    bool SpawnReady;
     Timer InhibitorTimer;
 
+    public void SetUp (
+        Camp camp,
+        int unitRange,
+        int laneRange
+    ) {
+        Camp = camp;
+        UnitRange = unitRange;
+        LaneRange = laneRange;
+        SpawnReady = false;
+    }
+
     public override void _Ready() {
+        Cursor = Camp.GetCursor();
+        SpawnTimerContainer = Camp.GetSpawnTimerContainer();
         InhibitorTimer = GetNode<Timer>("InhibitorTimer");
         NewMove();
     }
@@ -32,15 +47,15 @@ public class AI : Node {
     }
 
     void Move() {
-        if (Camp.Cursor.Lane < LaneSelect) {
-            Camp.Cursor.MoveDown();
-        } else if (Camp.Cursor.Lane > LaneSelect) {
-            Camp.Cursor.MoveUp();
-        } else if (Camp.SpawnTimerContainer.UnitSelect < UnitSelect) {
-            Camp.SpawnTimerContainer.SelectSpawn(1);
-        } else if (Camp.SpawnTimerContainer.UnitSelect > UnitSelect) {
-            Camp.SpawnTimerContainer.SelectSpawn(-1);
-        } else if (Camp.SpawnTimerContainer.CheckTimer(UnitSelect)) {
+        if (Cursor.GetLane() < LaneSelect) {
+            Cursor.MoveDown();
+        } else if (Cursor.GetLane() > LaneSelect) {
+            Cursor.MoveUp();
+        } else if (SpawnTimerContainer.GetUnitSelect() < UnitSelect) {
+            SpawnTimerContainer.SpawnSelectRight();
+        } else if (SpawnTimerContainer.GetUnitSelect() > UnitSelect) {
+            SpawnTimerContainer.SpawnSelectLeft();
+        } else if (SpawnTimerContainer.CheckTimer(UnitSelect)) {
             SpawnReady = true;
         }
     }

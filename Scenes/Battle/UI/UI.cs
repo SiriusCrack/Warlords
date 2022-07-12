@@ -2,44 +2,44 @@ using Godot;
 using System;
 
 public class UI : Control {
+    // Parents
+    Battle Battle;
+
+    // Children
+    VBoxContainer VBoxContainer;
     ProgressBar Score;
+    SpawnTimerContainer LeftSpawnTimerContainer;
+    SpawnTimerContainer RightSpawnTimerContainer;
+
+    public void SetUp(Battle battle) {
+        Battle = battle;
+    }
 
     public override void _Ready() {
-        Score = GetNode<ProgressBar>("VBoxContainer/Score");
+        VBoxContainer = GetNode<VBoxContainer>("VBoxContainer");
+        Score = VBoxContainer.GetNode<ProgressBar>("Score");
+        LeftSpawnTimerContainer = VBoxContainer.GetNode<SpawnTimerContainer>("MarginContainer/HBoxContainer/SpawnTimerContainerLeft");
+        RightSpawnTimerContainer = VBoxContainer.GetNode<SpawnTimerContainer>("MarginContainer/HBoxContainer/SpawnTimerContainerRight");
         SetScore();
     }
 
-    public SpawnTimerContainer GetSpawnTimerContainer(Battle.Side side, bool isPlayable) {
-        SpawnTimerContainer spawnTimerContainer;
+    public SpawnTimerContainer GetSpawnTimerContainer(Battle.Side side) {
         switch (side) {
-            case Battle.Side.Left: {
-                spawnTimerContainer = GetNode<SpawnTimerContainer>("VBoxContainer/MarginContainer/HBoxContainer/SpawnTimerContainerLeft");
-                break;
-            }
-            default: {
-                spawnTimerContainer = GetNode<SpawnTimerContainer>("VBoxContainer/MarginContainer/HBoxContainer/SpawnTimerContainerRight");
-                break;
-            }
+            case Battle.Side.Left: return LeftSpawnTimerContainer;
+            default: return RightSpawnTimerContainer;
         }
-        return spawnTimerContainer;
     }
 
     public float GetUIDepth() {
-        return GetNode<VBoxContainer>("VBoxContainer").RectSize.y;
+        return VBoxContainer.RectSize.y;
     }
 
-    public void OnGoalEntered(Area2D area) {
-        Unit unit = area.GetParent<Unit>();
+    public void OnGoalEntered(Node body, Battle.Side side) {
+        Unit unit = body.GetParent<Unit>();
         double newValue = Score.Value;
-        switch (unit.Camp.Side){
-            case Battle.Side.Left: {
-                newValue += unit.Health;
-                break;
-            }
-            default: {
-                newValue -= unit.Health;
-                break;
-            }
+        switch (side){
+            case Battle.Side.Left: newValue -= unit.GetHealth(); break;
+            default: newValue += unit.GetHealth(); break;
         }
         unit.QueueFree();
         if (newValue > Score.MaxValue) {

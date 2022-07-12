@@ -2,12 +2,25 @@ using Godot;
 using System;
 
 public class SpawnTimerUI : Control {
-    public SpawnTimerContainer SpawnTimerContainer;
-    public int TimerAddress;
+    // Parents
+    SpawnTimerContainer SpawnTimerContainer;
+
+    int TimerAddress;
+    float ProgressValue;
+
+    // Children
     TextureProgress TextureProgress;
     Timer SpawnTimer;
-    
-    float ProgressValue;
+
+    public void SetUp (
+        SpawnTimerContainer spawnTimerContainer,
+        int timerAddress
+    ) {
+        SpawnTimerContainer = spawnTimerContainer;
+        TimerAddress = timerAddress;
+    }
+
+
     public override void _Ready() {
         TextureProgress = GetNode<TextureProgress>("TextureProgress");
         SpawnTimer = GetNode<Timer>("SpawnTimer");
@@ -34,6 +47,6 @@ public class SpawnTimerUI : Control {
     }
 
 	void OnTouchButtonPressed() {
-        SpawnTimerContainer.Camp.SpawnUnit(TimerAddress);
+        SpawnTimerContainer.SpawnSelect(TimerAddress);
 	}
 }

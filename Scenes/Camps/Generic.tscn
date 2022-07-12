@@ -28,4 +28,4 @@ scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 3 )
 script = ExtResource( 2 )
 
-[connection signal="area_entered" from="Goal" to="." method="OnGoalEntered"]
+[connection signal="body_entered" from="Goal" to="." method="OnGoalEntered"]

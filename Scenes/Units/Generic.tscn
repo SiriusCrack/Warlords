@@ -60,14 +60,14 @@ extents = Vector2( 128, 128 )
 [node name="Generic" type="Node"]
 
 [node name="Unit" type="Node2D" parent="."]
-scale = Vector2( 0.2, 0.2 )
+scale = Vector2( 0.1, 0.1 )
 script = ExtResource( 11 )
 Health = 10
 Speed = 100
 
 [node name="SFXPlayer" type="AudioStreamPlayer" parent="Unit"]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Unit"]
+[node name="BodyAnimationPlayer" type="AnimationPlayer" parent="Unit"]
 root_node = NodePath("")
 anims/Advancing = SubResource( 5 )
 anims/Attacking = SubResource( 4 )

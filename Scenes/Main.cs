@@ -14,23 +14,26 @@ public class Main : Node {
     }
 
     public void StartGame (
-        PackedScene leftCamp, 
-        PackedScene rightCamp, 
+        PackedScene leftCampScene, 
+        PackedScene rightCampScene, 
         Godot.Collections.Array<PackedScene> leftCampUnits, 
         Godot.Collections.Array<PackedScene> rightCampUnits,
         bool isLeftPlayable, 
         bool isRightPlayable,
-        PackedScene AI
+        PackedScene aiScene
     ) {
         GetNode<Node>("Menu").QueueFree();
         Battle battleScene = BattleScene.Instance<Battle>();
-        battleScene.LeftCampScene = leftCamp;
-        battleScene.RightCampScene = rightCamp;
-        battleScene.LeftCampUnits = leftCampUnits;
-        battleScene.RightCampUnits = rightCampUnits;
-        battleScene.IsLeftPlayable = isLeftPlayable;
-        battleScene.IsRightPlayable = isRightPlayable;
-        battleScene.AI = AI;
+        battleScene.SetUp (
+            this,
+            leftCampScene, 
+            rightCampScene, 
+            leftCampUnits, 
+            rightCampUnits, 
+            isLeftPlayable, 
+            isRightPlayable, 
+            aiScene
+        );
         AddChild(battleScene);
     }
 

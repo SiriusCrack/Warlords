@@ -3,6 +3,9 @@ using Godot.Collections;
 using System;
 
 public class Battle : Node {
+    // Parents
+    Main Main;
+
     // UI Setup
     [Export] PackedScene DefaultUI;
     [Export] PackedScene TouchUI;
@@ -13,13 +16,13 @@ public class Battle : Node {
 
     // Camp Setup
     public enum Side {Left, Right};
-    public PackedScene LeftCampScene;
-    public PackedScene RightCampScene;
-    public Array<PackedScene> LeftCampUnits;
-    public Array<PackedScene> RightCampUnits;
-    public bool IsLeftPlayable;
-    public bool IsRightPlayable;
-    public PackedScene AI;
+    PackedScene LeftCampScene;
+    PackedScene RightCampScene;
+    Array<PackedScene> LeftCampUnits;
+    Array<PackedScene> RightCampUnits;
+    bool IsLeftPlayable;
+    bool IsRightPlayable;
+    PackedScene AIScene;
     Camp LeftCamp;
     Camp RightCamp;
     
@@ -28,15 +31,40 @@ public class Battle : Node {
     [Export] PackedScene Victory;
     [Export] PackedScene Defeat;
 
-    public Node Battlefield;
+    // Children
+    Node Battlefield;
+
+    public void SetUp (
+        Main main,
+        PackedScene leftCampScene, 
+        PackedScene rightCampScene, 
+        Array<PackedScene> leftCampUnits, 
+        Array<PackedScene> rightCampUnits, 
+        bool isLeftPlayable, 
+        bool isRightPlayable, 
+        PackedScene aiScene
+    ) {
+        Main = main;
+        LeftCampScene = leftCampScene;
+        RightCampScene = rightCampScene;
+        LeftCampUnits = leftCampUnits;
+        RightCampUnits = rightCampUnits;
+        IsLeftPlayable = isLeftPlayable;
+        IsRightPlayable = isRightPlayable;
+        AIScene = aiScene;
+    }
 
     public override void _Ready() {
         MakeUI();
+        SetLanes();
         MakeCamp(Side.Left);
         MakeCamp(Side.Right);
         MakeBattlefield();
         MoveChild(UI, 3);
-        SetLanes();
+    }
+
+    public void AddToBattlefield(Unit unit) {
+        Battlefield.AddChild(unit);
     }
 
     public void GameOver(Side winner) {
@@ -52,7 +80,7 @@ public class Battle : Node {
             endState = EndState.Defeat;
             endScene = Defeat;
         }
-        GetParent<Main>().GameOver(endState, endScene, GetNode("."));
+        Main.GameOver(endState, endScene, GetNode("."));
     }
 
     void MakeUI() {
@@ -63,49 +91,46 @@ public class Battle : Node {
             ui = DefaultUI;
         }
         UI = ui.Instance<UI>();
+        UI.SetUp(this);
         AddChild(UI);
     }
     
     void MakeCamp(Side side) {
         Camp camp;
+        Array<PackedScene> campUnits;
+        bool isCampPlayable;
         switch (side) {
             case Side.Left: {
-                LeftCamp = LeftCampScene.Instance<Camp>();
-                LeftCamp.UnitScenes = LeftCampUnits;
-                LeftCamp.IsPlayable = IsLeftPlayable;
-                if (!IsLeftPlayable) {
-                    GiveAI(LeftCamp);
-                }
-                LeftCamp.Side = Side.Left;
-                camp = LeftCamp;
+                camp = LeftCampScene.Instance<Camp>();
+                campUnits = LeftCampUnits;
+                isCampPlayable = IsLeftPlayable;
                 break;
             }
             default: {
-                RightCamp = RightCampScene.Instance<Camp>();
-                RightCamp.UnitScenes = RightCampUnits;
-                RightCamp.IsPlayable = IsRightPlayable;
-                if (!IsRightPlayable) {
-                    GiveAI(RightCamp);
-                }
-                RightCamp.Side = Side.Right;
-                Control control = RightCamp.GetNode<Control>(".");
-                control.AnchorLeft = 1;
-                control.AnchorRight = 1;
-                control.RectScale = new Vector2(-1, 1);
-                camp = RightCamp;
+                camp = RightCampScene.Instance<Camp>();
+                campUnits = RightCampUnits;
+                isCampPlayable = IsRightPlayable;
                 break;
             }
         }
-        camp.Battle = this;
-        camp.UI = UI;
+        camp.SetUp (
+            this,
+            UI,
+            campUnits,
+            side,
+            isCampPlayable
+        );
         AddChild(camp);
+        if (!isCampPlayable) GiveAI(camp, campUnits);
     }
 
-    void GiveAI(Camp camp) {
-        AI ai = AI.Instance<AI>();
-        ai.Camp = camp;
-        ai.UnitRange = RightCampUnits.Count;
-        ai.LaneRange = LaneCount;
+    void GiveAI(Camp camp, Array<PackedScene> campUnits) {
+        AI ai = AIScene.Instance<AI>();
+        ai.SetUp (
+            camp,
+            campUnits.Count,
+            LaneCount
+        );
         camp.AddChild(ai);
     }
 
@@ -118,8 +143,6 @@ public class Battle : Node {
         for (float i = LaneCount-1; i > -1; i--) {
             Lanes.Add(bottom - (LaneStep*i));
         }
-        LeftCamp.SetCursor();
-        RightCamp.SetCursor();
     }
 
     void MakeBattlefield() {

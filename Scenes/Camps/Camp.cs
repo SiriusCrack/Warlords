@@ -3,34 +3,56 @@ using Godot.Collections;
 using System;
 
 public class Camp : Control {
-    public Battle Battle;
-    public UI UI;
-    public Array<PackedScene> UnitScenes;
-    public bool IsPlayable;
-    public Battle.Side Side;
-    public SpawnTimerContainer SpawnTimerContainer;
-    public Cursor Cursor;
+    // Parents
+    Battle Battle;
+    UI UI;
+
+    // Spawning
+    Array<PackedScene> UnitScenes;
+    Battle.Side Side;
+    bool IsPlayable;
+    const float SpawnPoint = 100;
+
+    // Children
+    SpawnTimerContainer SpawnTimerContainer;
+    Cursor Cursor;
     Area2D Goal;
-    float SpawnPoint;
+
+    public void SetUp (
+        Battle battle,
+        UI ui,
+        Array<PackedScene> unitScenes,
+        Battle.Side side,
+        bool isPlayable
+    ) {
+        Battle = battle;
+        UI = ui;
+        UnitScenes = unitScenes;
+        Side = side;
+        IsPlayable = isPlayable;
+    }
 
     public override void _Ready() {
         Cursor = GetNode<Cursor>("Cursor");
         Goal = GetNode<Area2D>("Goal");
+        if (Side == Battle.Side.Right) AlignRight();
+        SetCursor();
         SetSpawnTimerContainer();
         SetGoal();
     }
 
     public override void _Process(float delta) {
         if (IsPlayable) {
-            GetInput();
+            CheckInput();
         }
     }
 
-    public void SetCursor() {
-        Cursor.Camp = this;
-        Cursor.Position = new Vector2(Cursor.Position.x, Battle.Lanes[0]);
-        Cursor.Lane = 0;
-        Cursor.LaneCount = Battle.Lanes.Count;
+    public SpawnTimerContainer GetSpawnTimerContainer() {
+        return SpawnTimerContainer;
+    }
+
+    public Cursor GetCursor() {
+        return Cursor;
     }
 
     public void SpawnUnit(int unitAddress) {
@@ -39,48 +61,72 @@ public class Camp : Control {
             Unit unit = unitScene.GetNode<Unit>("Unit");
             unitScene.RemoveChild(unit);
             unitScene.QueueFree();
-            unit.Camp = this;
-            unit.SetDirection(Side);
-            Battle.Battlefield.AddChild(unit);
-            unit.GlobalPosition = new Vector2(Cursor.GlobalPosition.x+SpawnPoint, Cursor.GlobalPosition.y);
-            unit.SetCollision(Cursor.Lane, Side);
+            SetUnit(unit);
+            Battle.AddToBattlefield(unit);
             SpawnTimerContainer.ResetTimer(unitAddress);
         }
     }
 
-    void OnGoalEntered(Area2D area) {
-        UI.OnGoalEntered(area);
+    public void OnGoalEntered(Node body) {
+        UI.OnGoalEntered(body, Side);
     }
 
-    void SetGoal() {
-        switch (Side) {
-			case Battle.Side.Left: {
-				for (int i = 16; i < 32; i++) {
-					Goal.SetCollisionMaskBit(i, true);
-				}
-                SpawnPoint = -100;
-				break;
-			}
-			default: {
-				for (int i = 0; i < 16; i++) {
-					Goal.SetCollisionMaskBit(i, true);
-				}
-                SpawnPoint = 100;
-				break;
-			}
-		}
+    void AlignRight() {
+        Control control = GetNode<Control>(".");
+        control.AnchorLeft = 1;
+        control.AnchorRight = 1;
+        control.RectScale = new Vector2(-1, 1);
+    }
+
+    void SetCursor() {
+        Cursor.SetUp (
+            Battle,
+            this,
+            IsPlayable
+        );
+        
+    }
+
+    void SetUnit(Unit unit) {
+        unit.SetUp (
+            this,
+            Cursor,
+            Side,
+            SpawnPoint
+        );
+        
     }
 
     void SetSpawnTimerContainer() {
-        SpawnTimerContainer = UI.GetSpawnTimerContainer(Side, IsPlayable);
-        SpawnTimerContainer.SetSpawnTimers(UnitScenes);
-        SpawnTimerContainer.Camp = this;
-        SpawnTimerContainer.IsPlayable = IsPlayable;
+        SpawnTimerContainer = UI.GetSpawnTimerContainer(Side);
+        SpawnTimerContainer.SetUp (
+            this, 
+            IsPlayable,
+            UnitScenes 
+        );
     }
 
-    void GetInput() {
+    void SetGoal() {
+        int fromBit;
+        int toBit;
+        switch (Side) {
+			case Battle.Side.Left:
+                fromBit = 16;
+                toBit = 32;
+				break;
+			default:
+                fromBit = 0;
+                toBit = 16;
+				break;
+		}
+        for (int i = toBit; i < fromBit; i++) {
+            Goal.SetCollisionMaskBit(i, true);
+        }
+    }
+
+    void CheckInput() {
         if (Input.IsActionJustPressed("spawn")) {
-            SpawnUnit(SpawnTimerContainer.UnitSelect);
+            SpawnUnit(SpawnTimerContainer.GetUnitSelect());
         }
     }
 }
