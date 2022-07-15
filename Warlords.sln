@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warlords Clone", "Warlords Clone.csproj", "{5CFA2F70-B65A-4912-BF0B-E6127B4AE4FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warlords", "Warlords.csproj", "{5CFA2F70-B65A-4912-BF0B-E6127B4AE4FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

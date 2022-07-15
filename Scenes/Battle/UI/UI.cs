@@ -23,7 +23,7 @@ public class UI : Control {
         SetScore();
     }
 
-    public SpawnTimerContainer GetSpawnTimerContainer(Battle.Side side) {
+    public SpawnTimerContainer GetSpawnTimerContainer(Battle.Side side, bool isPlayable) {
         switch (side) {
             case Battle.Side.Left: return LeftSpawnTimerContainer;
             default: return RightSpawnTimerContainer;

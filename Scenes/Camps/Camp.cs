@@ -98,7 +98,7 @@ public class Camp : Control {
     }
 
     void SetSpawnTimerContainer() {
-        SpawnTimerContainer = UI.GetSpawnTimerContainer(Side);
+        SpawnTimerContainer = UI.GetSpawnTimerContainer(Side, IsPlayable);
         SpawnTimerContainer.SetUp (
             this, 
             IsPlayable,
