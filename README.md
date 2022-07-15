@@ -1,5 +1,12 @@
-# Release v0.6
-https://siriuscrack.itch.io/warlords-clone
-
 TODO:
-* add final unit sprites / animations / SFX
+* Write story structure
+* Design combat
+* Create Menus
+  * Start
+  * Map
+  * Deck management
+  * Dialogue
+* Unit art
+* Menu art
+* Background art
+* Setting art
