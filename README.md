@@ -6,6 +6,7 @@ TODO:
   * Map
   * Deck management
   * Dialogue
+* Write AI
 * Unit art
 * Menu art
 * Background art
