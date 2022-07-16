@@ -1,13 +1,13 @@
 TODO:
 * Write story structure
 * Design combat
-* Create Menus
+* Scenes to make:
   * Start
-  * Map
-  * Deck management
+  * Conquest Map
+  * Deck Management
   * Dialogue
-* Write AI
-* Unit art
-* Menu art
-* Background art
-* Setting art
+* AI:
+  * Battle AI
+  * Map AI
+* Art Assets:
+  * So many
