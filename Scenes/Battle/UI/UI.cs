@@ -34,8 +34,7 @@ public class UI : Control {
         return VBoxContainer.RectSize.y;
     }
 
-    public void OnGoalEntered(Node body, Battle.Side side) {
-        Unit unit = body.GetParent<Unit>();
+    public void OnGoalEntered(Unit unit, Battle.Side side) {
         double newValue = Score.Value;
         switch (side){
             case Battle.Side.Left: newValue -= unit.GetHealth(); break;

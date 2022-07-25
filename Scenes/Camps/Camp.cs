@@ -67,8 +67,8 @@ public class Camp : Control {
         }
     }
 
-    public void OnGoalEntered(Node body) {
-        UI.OnGoalEntered(body, Side);
+    public void OnGoalEntered(Unit unit) {
+        UI.OnGoalEntered(unit, Side);
     }
 
     void AlignRight() {
@@ -119,7 +119,8 @@ public class Camp : Control {
                 toBit = 16;
 				break;
 		}
-        for (int i = toBit; i < fromBit; i++) {
+        for (int i = fromBit; i < toBit; i++) {
+            GD.Print(i);
             Goal.SetCollisionMaskBit(i, true);
         }
     }
