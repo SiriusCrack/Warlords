@@ -18,6 +18,7 @@ RightCamp = ExtResource( 8 )
 LeftCampUnits = [ ExtResource( 2 ), ExtResource( 6 ) ]
 RightCampUnits = [ ExtResource( 2 ), ExtResource( 6 ) ]
 IsLeftPlayable = true
+IsRightPlayable = true
 AI = ExtResource( 7 )
 
 [node name="Control" type="Control" parent="."]

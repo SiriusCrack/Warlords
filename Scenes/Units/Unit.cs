@@ -16,6 +16,7 @@ public class Unit : KinematicBody2D {
 	float SpawnPoint;
 	bool Dead;
 	bool Advancing;
+	int Lane;
 
 	// Children
 	AudioStreamPlayer SFXPlayer;
@@ -41,8 +42,8 @@ public class Unit : KinematicBody2D {
 	public override void _Ready() {
 		SFXPlayer = GetNode<AudioStreamPlayer>("SFXPlayer");
 		BodyAnimationPlayer = GetNode<AnimationPlayer>("BodyAnimationPlayer");
-		Weapon = GetNodeOrNull<Weapon>("Weapon");
-		if (Weapon != null) SetWeapon();
+		Weapon = GetNode<Weapon>("Weapon");
+		Range = GetNode<Area2D>("Range");
 		SetCollision(Side);
 		HealthBar = GetNode<HealthBar>("HealthBar");
 		HealthBar.SetMaxHealth(Health);
@@ -54,7 +55,6 @@ public class Unit : KinematicBody2D {
 	public override void _PhysicsProcess(float delta) {
 		if (Advancing) {
 			MoveAndCollide(Vector2.Right * Direction * Speed * delta);
-			// Position += Direction * Speed * delta;
 		}
 	}
 
@@ -99,7 +99,7 @@ public class Unit : KinematicBody2D {
 	}
 
 	void SetCollision(Battle.Side side) {
-		int lane = Cursor.GetLane();
+		Lane = Cursor.GetLane();
 		int fromBit;
 		int toBit;
 		switch (side) {
@@ -110,34 +110,29 @@ public class Unit : KinematicBody2D {
 			default:
 				fromBit = 0;
 				toBit = 16;
-				lane += 16;
+				Lane += 16;
 				break;
 		}
 		for (int i = fromBit; i < toBit; i++) {
 			Weapon.GetNode<Area2D>("HitBox").SetCollisionMaskBit(i, true);
 			Range.SetCollisionMaskBit(i, true);
 		}
-		this.SetCollisionLayerBit(lane, true);
-		SetCollisionMaskBit(lane, true);
+		SetCollisionLayerBit(Lane, true);
 	}
 
 	void SetSpawnPoint(float spawnPoint) {
 		SpawnPoint = spawnPoint * Direction.x;
 	}
 
-	void SetWeapon() {
-		Range = Weapon.GetNode<Area2D>("Range");
-		Weapon.RemoveChild(Range);
-		AddChildBelowNode(Weapon, Range);
-	}
-
 	void StartAdvancing() {
 		Advancing = true;
+		SetCollisionMaskBit(Lane, false);
 		BodyAnimationPlayer.Play("Advancing");
 	}
 
 	void StartAttacking() {
 		Advancing = false;
+		SetCollisionMaskBit(Lane, true);
 		BodyAnimationPlayer.Play("Attacking");
 	}
 
