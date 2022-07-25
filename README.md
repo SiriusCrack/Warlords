@@ -26,3 +26,18 @@ TODO:
       * implement building
       * replace goal / score with building health
   * something something dialogue
+* Art
+  * come up w art style
+  * Backgrounds
+    * battle scene backgrounds
+      * attack scenes vs defense scenes
+      * different province settings
+    * conquest map
+    * Menus
+      * Start menu
+      * Deck management menu
+  * units + weapons + animations
+      * Kingdom A
+      * Kingdom B
+      * peasants / Kingdom C
+      * portraits?
