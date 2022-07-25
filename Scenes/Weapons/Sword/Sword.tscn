@@ -5,7 +5,6 @@
 
 [sub_resource type="Animation" id=1]
 resource_name = "Attack"
-loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:rotation_degrees")
 tracks/0/interp = 1
@@ -33,41 +32,17 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id=2]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ -11.4866 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( -26, 11 ) ]
-}
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 208, 10 )
 
 [node name="Weapon" type="Node2D"]
 position = Vector2( -26, 11 )
-rotation = -0.200479
+rotation = -0.253073
 script = ExtResource( 2 )
 Damage = 10
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="WeaponAnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Attack = SubResource( 1 )
 anims/RESET = SubResource( 2 )
 

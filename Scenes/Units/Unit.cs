@@ -2,7 +2,7 @@ using Godot;
 using Godot.Collections;
 using System;
 
-public class Unit : Node2D {
+public class Unit : KinematicBody2D {
 	// Stats
 	[Export] int Health;
 	[Export] int Speed;
@@ -20,7 +20,6 @@ public class Unit : Node2D {
 	// Children
 	AudioStreamPlayer SFXPlayer;
 	AnimationPlayer BodyAnimationPlayer;
-	KinematicBody2D Body;
 	Weapon Weapon;
 	Area2D Range;
 	HealthBar HealthBar;
@@ -34,28 +33,28 @@ public class Unit : Node2D {
 		Camp = camp;
 		Cursor = cursor;
 		Side = side;
-		SetSpawnPoint(spawnPoint);
 		SetDirection(Side);
+		SetSpawnPoint(spawnPoint);
 		Dead = false;
     }
 
 	public override void _Ready() {
 		SFXPlayer = GetNode<AudioStreamPlayer>("SFXPlayer");
 		BodyAnimationPlayer = GetNode<AnimationPlayer>("BodyAnimationPlayer");
-		Body = GetNode<KinematicBody2D>("Body");
 		Weapon = GetNodeOrNull<Weapon>("Weapon");
 		if (Weapon != null) SetWeapon();
 		SetCollision(Side);
 		HealthBar = GetNode<HealthBar>("HealthBar");
 		HealthBar.SetMaxHealth(Health);
 		Scale = new Vector2(Scale.x * Direction.x, Scale.y);
-		GlobalPosition = new Vector2(Cursor.GlobalPosition.x + SpawnPoint, Cursor.GlobalPosition.y);
+		GlobalPosition = new Vector2(Cursor.GlobalPosition.x - SpawnPoint, Cursor.GlobalPosition.y);
 		StartAdvancing();
 	}
 
 	public override void _PhysicsProcess(float delta) {
 		if (Advancing) {
-			Position += Direction * Speed * delta;
+			MoveAndCollide(Vector2.Right * Direction * Speed * delta);
+			// Position += Direction * Speed * delta;
 		}
 	}
 
@@ -82,6 +81,10 @@ public class Unit : Node2D {
 			StartDying();
 		}
 		HealthBar.UpdateHealth(Health);
+	}
+
+	void Attack() {
+		Weapon.Attack();
 	}
 
 	void SetDirection(Battle.Side side) {
@@ -114,7 +117,8 @@ public class Unit : Node2D {
 			Weapon.GetNode<Area2D>("HitBox").SetCollisionMaskBit(i, true);
 			Range.SetCollisionMaskBit(i, true);
 		}
-		Body.SetCollisionLayerBit(lane, true);
+		this.SetCollisionLayerBit(lane, true);
+		SetCollisionMaskBit(lane, true);
 	}
 
 	void SetSpawnPoint(float spawnPoint) {
@@ -129,18 +133,18 @@ public class Unit : Node2D {
 
 	void StartAdvancing() {
 		Advancing = true;
-		// AnimationPlayer.Play("Advancing");
+		BodyAnimationPlayer.Play("Advancing");
 	}
 
 	void StartAttacking() {
 		Advancing = false;
-		// AnimationPlayer.Play("Attack");
+		BodyAnimationPlayer.Play("Attacking");
 	}
 
 	void StartDying() {
 		Dead = true;
-		Body.QueueFree();
-		// AnimationPlayer.Play("Dying");
+		GetNode("CollisionShape2D").QueueFree();
+		BodyAnimationPlayer.Play("Dying");
 		QueueFree();
 	}
 }

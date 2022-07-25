@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/UnitTimers/Progress.png" type="Texture" id=1]
 [ext_resource path="res://Assets/HealthBars/Border.png" type="Texture" id=2]
@@ -11,8 +11,7 @@
 [ext_resource path="res://Assets/Square.png" type="Texture" id=9]
 [ext_resource path="res://Assets/Nothing.png" type="Texture" id=10]
 [ext_resource path="res://Scenes/Units/Unit.cs" type="Script" id=11]
-[ext_resource path="res://Assets/Square/Outline.png" type="Texture" id=12]
-[ext_resource path="res://Assets/Square/Fill.png" type="Texture" id=13]
+[ext_resource path="res://Assets/Square/Square.png" type="Texture" id=12]
 
 [sub_resource type="Animation" id=5]
 resource_name = "Advancing"
@@ -55,35 +54,27 @@ tracks/0/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 128, 128 )
+extents = Vector2( 128, 254 )
 
 [node name="Generic" type="Node"]
 
-[node name="Unit" type="Node2D" parent="."]
+[node name="Unit" type="KinematicBody2D" parent="."]
 scale = Vector2( 0.1, 0.1 )
+collision_layer = 0
+collision_mask = 0
 script = ExtResource( 11 )
-Health = 10
-Speed = 100
 
 [node name="SFXPlayer" type="AudioStreamPlayer" parent="Unit"]
 
 [node name="BodyAnimationPlayer" type="AnimationPlayer" parent="Unit"]
-root_node = NodePath("")
 anims/Advancing = SubResource( 5 )
 anims/Attacking = SubResource( 4 )
 anims/Dying = SubResource( 3 )
 
-[node name="Body" type="KinematicBody2D" parent="Unit"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/Body"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit"]
 shape = SubResource( 6 )
 
-[node name="Fill" type="Sprite" parent="Unit/Body"]
-texture = ExtResource( 13 )
-
-[node name="Outline" type="Sprite" parent="Unit/Body"]
+[node name="Sprite" type="Sprite" parent="Unit"]
 texture = ExtResource( 12 )
 
 [node name="HealthBar" type="Control" parent="Unit"]
