@@ -63,6 +63,10 @@ public class Battle : Node {
         MoveChild(UI, 3);
     }
 
+    public float GetLaneStep() {
+        return LaneStep;
+    }
+
     public void AddToBattlefield(Unit unit) {
         Battlefield.AddChild(unit);
     }

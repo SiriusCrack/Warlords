@@ -51,6 +51,10 @@ public class Camp : Control {
         return SpawnTimerContainer;
     }
 
+    public Battle GetBattle() {
+        return Battle;
+    }
+
     public Cursor GetCursor() {
         return Cursor;
     }

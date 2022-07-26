@@ -8,7 +8,7 @@ public class Unit : KinematicBody2D {
 	[Export] int Speed;
 
 	// Parents
-	Camp Camp;
+	protected Camp Camp;
 	Cursor Cursor;
 
 	Battle.Side Side;
@@ -22,7 +22,7 @@ public class Unit : KinematicBody2D {
 	AudioStreamPlayer SFXPlayer;
 	AnimationPlayer BodyAnimationPlayer;
 	Weapon Weapon;
-	Area2D Range;
+	protected Area2D Range;
 	HealthBar HealthBar;
 
     public void SetUp (
@@ -133,7 +133,7 @@ public class Unit : KinematicBody2D {
 	void StartAttacking() {
 		Advancing = false;
 		SetCollisionMaskBit(Lane, true);
-		BodyAnimationPlayer.Play("Attacking");
+		BodyAnimationPlayer.Play("StartAttacking");
 	}
 
 	void StartDying() {
