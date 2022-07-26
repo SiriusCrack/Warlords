@@ -5,7 +5,7 @@
 [ext_resource path="res://Assets/Weapons/Sword.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 208, 10 )
+extents = Vector2( 200, 10 )
 
 [sub_resource type="Animation" id=1]
 resource_name = "Attack"
@@ -44,13 +44,11 @@ length = 0.001
 Health = 100
 Speed = 100
 
-[node name="Range" type="Area2D" parent="Unit" index="4"]
-collision_layer = 0
-collision_mask = 0
-monitorable = false
+[node name="Range" parent="Unit" index="4"]
+scale = Vector2( 1, 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/Range" index="0"]
-position = Vector2( 83, 0 )
+[node name="CollisionShape2D" parent="Unit/Range" index="0"]
+position = Vector2( 70, 0 )
 shape = SubResource( 3 )
 
 [node name="Weapon" type="Node2D" parent="Unit" index="5"]
