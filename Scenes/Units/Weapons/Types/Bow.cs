@@ -2,7 +2,11 @@ using Godot;
 using System;
 
 public class Bow : Weapon {
-    void Aim() {
-        
+    Unit Target;
+
+    new void Hit(Unit unit = null) {
+        if (Target != null) {
+            Target.TakeDamage(Damage);
+        }
     }
 }

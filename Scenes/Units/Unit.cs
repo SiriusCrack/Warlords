@@ -11,7 +11,7 @@ public class Unit : KinematicBody2D {
 	protected Camp Camp;
 	Cursor Cursor;
 
-	Battle.Side Side;
+	protected Battle.Side Side;
 	Vector2 Direction;
 	float SpawnPoint;
 	bool Dead;
@@ -21,7 +21,7 @@ public class Unit : KinematicBody2D {
 	// Children
 	AudioStreamPlayer SFXPlayer;
 	AnimationPlayer BodyAnimationPlayer;
-	Weapon Weapon;
+	protected Weapon Weapon;
 	protected Area2D Range;
 	HealthBar HealthBar;
 
@@ -42,7 +42,7 @@ public class Unit : KinematicBody2D {
 	public override void _Ready() {
 		SFXPlayer = GetNode<AudioStreamPlayer>("SFXPlayer");
 		BodyAnimationPlayer = GetNode<AnimationPlayer>("BodyAnimationPlayer");
-		Weapon = GetNode<Weapon>("Hand/Weapon");
+		Weapon = GetNode<Weapon>("Weapon");
 		Range = GetNode<Area2D>("Range");
 		SetCollision(Side);
 		HealthBar = GetNode<HealthBar>("HealthBar");
@@ -53,7 +53,12 @@ public class Unit : KinematicBody2D {
 	}
 
 	public override void _PhysicsProcess(float delta) {
-		if (Advancing) {
+		Vector2 relVec = Vector2.Right * Direction * Speed * delta;
+		var collisionCheck = MoveAndCollide(relVec, true, true, true);
+		if (collisionCheck != null) {
+			SetCollisionMaskBit(Lane, true);
+		}
+		if (Advancing && collisionCheck == null) {
 			MoveAndCollide(Vector2.Right * Direction * Speed * delta);
 		}
 	}
@@ -72,6 +77,10 @@ public class Unit : KinematicBody2D {
 		return Health;
 	}
 
+	public Battle.Side GetSide() {
+		return Side;
+	}
+
 	public void TakeDamage(int damage) {
 		int newHealth = Health - damage;
 		if (newHealth > 0) {
@@ -81,10 +90,6 @@ public class Unit : KinematicBody2D {
 			StartDying();
 		}
 		HealthBar.UpdateHealth(Health);
-	}
-
-	void Attack() {
-		Weapon.Attack();
 	}
 
 	void SetDirection(Battle.Side side) {
@@ -127,19 +132,24 @@ public class Unit : KinematicBody2D {
 	void StartAdvancing() {
 		Advancing = true;
 		SetCollisionMaskBit(Lane, false);
-		BodyAnimationPlayer.Play("Advancing");
+		BodyAnimationPlayer.Play("RESET");
 	}
 
 	void StartAttacking() {
 		Advancing = false;
 		SetCollisionMaskBit(Lane, true);
-		BodyAnimationPlayer.Play("StartAttacking");
+		BodyAnimationPlayer.Play("Attacking");
 	}
 
 	void StartDying() {
 		Dead = true;
-		GetNode("CollisionShape2D").QueueFree();
+		Advancing = false;
+		for (int i = 0; i < 32; i++) {
+			SetCollisionMaskBit(i, false);
+			SetCollisionLayerBit(i, false);
+		}
+		// GetNode("CollisionShape2D").QueueFree();
 		BodyAnimationPlayer.Play("Dying");
-		QueueFree();
+		// QueueFree();
 	}
 }

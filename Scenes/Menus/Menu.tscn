@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scenes/Menus/Menu.cs" type="Script" id=1]
 [ext_resource path="res://Scenes/Units/Types/Swordsman.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Scenes/Units/Types/Horseman.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Camps/AI/AI.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Scenes/Camps/Generic.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/Units/Types/Archer.tscn" type="PackedScene" id=9]
 
 [node name="Menu" type="Control"]
 anchor_right = 1.0
@@ -15,8 +16,8 @@ anchor_bottom = 1.0
 script = ExtResource( 1 )
 LeftCamp = ExtResource( 8 )
 RightCamp = ExtResource( 8 )
-LeftCampUnits = [ ExtResource( 2 ), ExtResource( 6 ) ]
-RightCampUnits = [ ExtResource( 2 ), ExtResource( 6 ) ]
+LeftCampUnits = [ ExtResource( 2 ), ExtResource( 6 ), ExtResource( 9 ) ]
+RightCampUnits = [ ExtResource( 2 ), ExtResource( 6 ), ExtResource( 9 ) ]
 IsLeftPlayable = true
 AI = ExtResource( 7 )
 

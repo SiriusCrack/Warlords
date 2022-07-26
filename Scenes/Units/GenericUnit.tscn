@@ -26,20 +26,30 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
+"times": PoolRealArray( 1 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "queue_free"
 } ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
-[sub_resource type="Animation" id=4]
-resource_name = "StartAttacking"
+[sub_resource type="Animation" id=7]
 length = 0.001
-step = 1.0
-tracks/0/type = "method"
-tracks/0/path = NodePath(".")
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -47,10 +57,20 @@ tracks/0/enabled = true
 tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "Attack"
-} ]
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("HealthBar:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
 }
 
 [sub_resource type="RectangleShape2D" id=6]
@@ -69,7 +89,7 @@ script = ExtResource( 11 )
 [node name="BodyAnimationPlayer" type="AnimationPlayer" parent="Unit"]
 anims/Advancing = SubResource( 5 )
 anims/Dying = SubResource( 3 )
-anims/StartAttacking = SubResource( 4 )
+anims/RESET = SubResource( 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit"]
 position = Vector2( 0, 9.53674e-06 )
@@ -84,8 +104,6 @@ collision_mask = 0
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/Range"]
-
-[node name="Hand" type="Node2D" parent="Unit"]
 
 [node name="HealthBar" type="Control" parent="Unit"]
 anchor_left = 0.5

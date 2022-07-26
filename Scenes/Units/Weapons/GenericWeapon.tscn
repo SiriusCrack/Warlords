@@ -1,15 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://Scenes/Units/Weapons/Weapon.cs" type="Script" id=2]
 
-[sub_resource type="Animation" id=2]
-length = 0.001
-
 [node name="Weapon" type="Node2D"]
 script = ExtResource( 2 )
-
-[node name="WeaponAnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RESET = SubResource( 2 )
 
 [node name="HitBox" type="Area2D" parent="."]
 collision_layer = 0
