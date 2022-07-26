@@ -17,25 +17,6 @@
 resource_name = "Advancing"
 loop = true
 
-[sub_resource type="Animation" id=4]
-resource_name = "Attacking"
-loop = true
-step = 1.0
-tracks/0/type = "method"
-tracks/0/path = NodePath(".")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 1 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "Attack"
-} ]
-}
-
 [sub_resource type="Animation" id=3]
 resource_name = "Dying"
 tracks/0/type = "method"
@@ -53,10 +34,29 @@ tracks/0/keys = {
 } ]
 }
 
+[sub_resource type="Animation" id=4]
+resource_name = "StartAttacking"
+length = 0.001
+step = 1.0
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "Attack"
+} ]
+}
+
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 128, 130 )
 
-[node name="Generic2" type="Node"]
+[node name="Generic" type="Node"]
 
 [node name="Unit" type="KinematicBody2D" parent="."]
 scale = Vector2( 0.1, 0.1 )
@@ -68,8 +68,8 @@ script = ExtResource( 11 )
 
 [node name="BodyAnimationPlayer" type="AnimationPlayer" parent="Unit"]
 anims/Advancing = SubResource( 5 )
-anims/Attacking = SubResource( 4 )
 anims/Dying = SubResource( 3 )
+anims/StartAttacking = SubResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit"]
 position = Vector2( 0, 9.53674e-06 )

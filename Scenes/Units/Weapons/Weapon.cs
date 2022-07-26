@@ -3,10 +3,10 @@ using System;
 
 public class Weapon : Node2D {
     // Stats
-    [Export] int Damage;
+    [Export] protected int Damage;
 
     // Children
-    AnimationPlayer WeaponAnimationPlayer;
+    protected AnimationPlayer WeaponAnimationPlayer;
 
     public override void _Ready() {
         WeaponAnimationPlayer = GetNode<AnimationPlayer>("WeaponAnimationPlayer");
