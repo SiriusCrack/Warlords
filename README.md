@@ -16,6 +16,7 @@ TODO:
   * improve camp AI
   * Units
     * implement archer
+      thoughts: implement same a sword. all weapons are just area2Ds that do special stuff on collision. bow is the weapon, target is picked by bow, aimed towards, and arrow is instantiated. arrow is another weapon, just does dammage on area collision and QueueFrees after. make ranged unit subclass to handle setting range according to lane spacing.
     * implement medic
     * implement engineer
     * implement general(?)
