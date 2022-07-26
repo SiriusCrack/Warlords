@@ -120,7 +120,6 @@ public class Camp : Control {
 				break;
 		}
         for (int i = fromBit; i < toBit; i++) {
-            GD.Print(i);
             Goal.SetCollisionMaskBit(i, true);
         }
     }

@@ -42,7 +42,7 @@ public class Unit : KinematicBody2D {
 	public override void _Ready() {
 		SFXPlayer = GetNode<AudioStreamPlayer>("SFXPlayer");
 		BodyAnimationPlayer = GetNode<AnimationPlayer>("BodyAnimationPlayer");
-		Weapon = GetNode<Weapon>("Weapon");
+		Weapon = GetNode<Weapon>("Hand/Weapon");
 		Range = GetNode<Area2D>("Range");
 		SetCollision(Side);
 		HealthBar = GetNode<HealthBar>("HealthBar");

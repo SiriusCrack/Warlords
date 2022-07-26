@@ -1,46 +1,14 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Scenes/Units/Generic.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/Units/Weapons/Weapon.cs" type="Script" id=2]
+[ext_resource path="res://Scenes/Units/GenericUnit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Units/Weapons/Types/Sword.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Units/Horse.png" type="Texture" id=3]
-[ext_resource path="res://Assets/Weapons/Sword.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 125, 245 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 200, 10 )
-
-[sub_resource type="Animation" id=1]
-resource_name = "Attack"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.5 ),
-"transitions": PoolRealArray( 0.5, 2, 0.5 ),
-"update": 0,
-"values": [ -14.5, 105.463, -14.5 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2, 0.5 ),
-"transitions": PoolRealArray( 0.5, 2, 0.5 ),
-"update": 0,
-"values": [ Vector2( 30, -150 ), Vector2( 88, 25 ), Vector2( 30, -150 ) ]
-}
-
-[sub_resource type="Animation" id=2]
-length = 0.001
 
 [node name="Generic" instance=ExtResource( 1 )]
 
@@ -57,37 +25,15 @@ shape = SubResource( 4 )
 position = Vector2( 0, -124 )
 texture = ExtResource( 3 )
 
-[node name="Range" parent="Unit" index="4"]
-scale = Vector2( 1, 1 )
-
 [node name="CollisionShape2D" parent="Unit/Range" index="0"]
 position = Vector2( 70, 0 )
 shape = SubResource( 3 )
 
-[node name="Weapon" type="Node2D" parent="Unit" index="5"]
-position = Vector2( 30, -150 )
-rotation = -0.253073
-script = ExtResource( 2 )
-Damage = 25
+[node name="Hand" parent="Unit" index="5"]
+position = Vector2( 50, -120 )
 
-[node name="WeaponAnimationPlayer" type="AnimationPlayer" parent="Unit/Weapon" index="0"]
-anims/Attack = SubResource( 1 )
-anims/RESET = SubResource( 2 )
-
-[node name="HitBox" type="Area2D" parent="Unit/Weapon" index="1"]
-position = Vector2( -1.90735e-06, -95 )
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Unit/Weapon/HitBox" index="0"]
-polygon = PoolVector2Array( -25, -110, 0, -128, 25, -110, 25, 55, -25, 55 )
-
-[node name="Sprite" type="Sprite" parent="Unit/Weapon" index="2"]
-position = Vector2( 0, -95 )
-texture = ExtResource( 4 )
+[node name="Weapon" parent="Unit/Hand" index="0" instance=ExtResource( 2 )]
 
 [node name="HealthBar" parent="Unit" index="6"]
 margin_top = -390.0
 margin_bottom = -390.0
-
-[connection signal="body_entered" from="Unit/Weapon/HitBox" to="Unit/Weapon" method="OnBodyEntered"]
