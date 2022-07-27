@@ -1,12 +1,17 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/Units/Weapons/GenericWeapon.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Weapons/Bow.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/Units/Weapons/Types/Bow.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/Units/Weapons/Types/Arrow.tscn" type="PackedScene" id=4]
 
 [node name="Weapon" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 Damage = 25
+Arrow = ExtResource( 4 )
 
-[node name="Sprite" parent="." index="1"]
+[node name="Muzzle" type="Position2D" parent="." index="1"]
+position = Vector2( 40, 0 )
+
+[node name="Sprite" parent="." index="2"]
 texture = ExtResource( 2 )

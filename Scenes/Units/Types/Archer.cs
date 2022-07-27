@@ -30,7 +30,7 @@ public class Archer : Unit {
 
     void Fire() {
         if (Target != null) {
-            Weapon.Hit(Target);
+            Weapon.Shoot();
         }
     }
 }
