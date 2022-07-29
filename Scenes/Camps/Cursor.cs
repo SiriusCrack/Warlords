@@ -49,10 +49,16 @@ public class Cursor : Sprite {
     }
 
     void CheckInput() {
-        if (Input.IsActionJustPressed("up")) {
+        if (Input.IsActionJustPressed("w") && Camp.GetSide() == Battle.Side.Left) {
             MoveUp();
         }
-        if (Input.IsActionJustPressed("down")) {
+        if (Input.IsActionJustPressed("s") && Camp.GetSide() == Battle.Side.Left) {
+            MoveDown();
+        }
+        if (Input.IsActionJustPressed("up") && Camp.GetSide() == Battle.Side.Right) {
+            MoveUp();
+        }
+        if (Input.IsActionJustPressed("down") && Camp.GetSide() == Battle.Side.Right) {
             MoveDown();
         }
     }
