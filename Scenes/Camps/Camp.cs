@@ -55,6 +55,10 @@ public class Camp : Control {
         return Battle;
     }
 
+    public Battle.Side GetSide() {
+        return Side;
+    }
+
     public Cursor GetCursor() {
         return Cursor;
     }
@@ -129,7 +133,10 @@ public class Camp : Control {
     }
 
     void CheckInput() {
-        if (Input.IsActionJustPressed("spawn")) {
+        if (Input.IsActionJustPressed("space") && Side == Battle.Side.Left) {
+            SpawnUnit(SpawnTimerContainer.GetUnitSelect());
+        }
+        if (Input.IsActionJustPressed("enter") && Side == Battle.Side.Right) {
             SpawnUnit(SpawnTimerContainer.GetUnitSelect());
         }
     }

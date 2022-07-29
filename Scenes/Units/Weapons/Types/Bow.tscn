@@ -10,7 +10,7 @@ script = ExtResource( 3 )
 Damage = 25
 Arrow = ExtResource( 4 )
 
-[node name="Muzzle" type="Position2D" parent="." index="1"]
+[node name="Muzzle" type="Position2D" parent="." index="0"]
 position = Vector2( 40, 0 )
 
 [node name="Sprite" parent="." index="2"]

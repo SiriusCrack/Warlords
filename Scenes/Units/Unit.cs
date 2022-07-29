@@ -21,6 +21,7 @@ public class Unit : KinematicBody2D {
 	// Children
 	AudioStreamPlayer SFXPlayer;
 	AnimationPlayer BodyAnimationPlayer;
+	protected Node2D Hand;
 	protected Weapon Weapon;
 	protected Area2D Range;
 	HealthBar HealthBar;
@@ -42,9 +43,10 @@ public class Unit : KinematicBody2D {
 	public override void _Ready() {
 		SFXPlayer = GetNode<AudioStreamPlayer>("SFXPlayer");
 		BodyAnimationPlayer = GetNode<AnimationPlayer>("BodyAnimationPlayer");
-		Weapon = GetNode<Weapon>("Weapon");
+		Hand =  GetNode<Node2D>("Hand");
+		Weapon = Hand.GetNode<Weapon>("Weapon");
 		Range = GetNode<Area2D>("Range");
-		SetCollision(Side);
+		SetCollision();
 		HealthBar = GetNode<HealthBar>("HealthBar");
 		HealthBar.SetMaxHealth(Health);
 		Scale = new Vector2(Scale.x * Direction.x, Scale.y);
@@ -71,6 +73,9 @@ public class Unit : KinematicBody2D {
 		if (!Advancing && inRange == 0 && !Dead) {
 			StartAdvancing();
 		}
+		if (!Advancing && inRange > 0 && !Dead && !BodyAnimationPlayer.IsPlaying()) {
+			BodyAnimationPlayer.Play("Attacking");
+		}
 	}
 
 	public int GetHealth() {
@@ -79,6 +84,10 @@ public class Unit : KinematicBody2D {
 
 	public Battle.Side GetSide() {
 		return Side;
+	}
+
+	public Area2D GetRange() {
+		return Range;
 	}
 
 	public void TakeDamage(int damage) {
@@ -103,24 +112,10 @@ public class Unit : KinematicBody2D {
 		}
 	}
 
-	void SetCollision(Battle.Side side) {
+	void SetCollision() {
 		Lane = Cursor.GetLane();
-		int fromBit;
-		int toBit;
-		switch (side) {
-			case Battle.Side.Left:
-				fromBit = 16;
-				toBit = 32;
-				break;
-			default:
-				fromBit = 0;
-				toBit = 16;
-				Lane += 16;
-				break;
-		}
-		for (int i = fromBit; i < toBit; i++) {
-			Weapon.GetNode<Area2D>("HitBox").SetCollisionMaskBit(i, true);
-			Range.SetCollisionMaskBit(i, true);
+		if (Side == Battle.Side.Right) {
+			Lane += 16;
 		}
 		SetCollisionLayerBit(Lane, true);
 	}
@@ -132,7 +127,6 @@ public class Unit : KinematicBody2D {
 	void StartAdvancing() {
 		Advancing = true;
 		SetCollisionMaskBit(Lane, false);
-		BodyAnimationPlayer.Play("RESET");
 	}
 
 	void StartAttacking() {
@@ -150,6 +144,5 @@ public class Unit : KinematicBody2D {
 		}
 		// GetNode("CollisionShape2D").QueueFree();
 		BodyAnimationPlayer.Play("Dying");
-		// QueueFree();
 	}
 }

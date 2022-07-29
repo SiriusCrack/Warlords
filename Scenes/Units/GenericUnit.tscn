@@ -15,7 +15,20 @@
 
 [sub_resource type="Animation" id=5]
 resource_name = "Advancing"
-loop = true
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "Reset"
+} ]
+}
 
 [sub_resource type="Animation" id=3]
 resource_name = "Dying"
@@ -104,6 +117,8 @@ collision_mask = 0
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/Range"]
+
+[node name="Hand" type="Node2D" parent="Unit"]
 
 [node name="HealthBar" type="Control" parent="Unit"]
 anchor_left = 0.5

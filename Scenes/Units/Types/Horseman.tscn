@@ -7,9 +7,8 @@
 
 [sub_resource type="Animation" id=5]
 resource_name = "Attacking"
-loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Weapon:rotation_degrees")
+tracks/0/path = NodePath("Hand/Weapon:rotation_degrees")
 tracks/0/interp = 2
 tracks/0/loop_wrap = false
 tracks/0/imported = false
@@ -21,7 +20,7 @@ tracks/0/keys = {
 "values": [ -12.0, 115.0, -12.0 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("Weapon:position")
+tracks/1/path = NodePath("Hand/Weapon:position")
 tracks/1/interp = 2
 tracks/1/loop_wrap = false
 tracks/1/imported = false
@@ -36,7 +35,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id=6]
 resource_name = "RESET"
 tracks/0/type = "value"
-tracks/0/path = NodePath("Weapon:position")
+tracks/0/path = NodePath("Hand/Weapon:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -48,7 +47,7 @@ tracks/0/keys = {
 "values": [ Vector2( -100, -300 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("Weapon:rotation_degrees")
+tracks/1/path = NodePath("Hand/Weapon:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -94,7 +93,7 @@ texture = ExtResource( 3 )
 position = Vector2( 70, 0 )
 shape = SubResource( 3 )
 
-[node name="Weapon" parent="Unit" index="6" instance=ExtResource( 2 )]
+[node name="Weapon" parent="Unit/Hand" index="0" instance=ExtResource( 2 )]
 position = Vector2( -100, -300 )
 
 [node name="HealthBar" parent="Unit" index="7"]
