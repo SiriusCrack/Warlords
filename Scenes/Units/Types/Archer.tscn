@@ -81,7 +81,7 @@ tracks/1/keys = {
 [node name="Unit" parent="." index="0"]
 script = ExtResource( 2 )
 Health = 100
-Speed = 100
+Speed = 80
 RangeDistance = 2000.0
 
 [node name="BodyAnimationPlayer" parent="Unit" index="1"]

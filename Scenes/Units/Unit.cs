@@ -56,25 +56,30 @@ public class Unit : KinematicBody2D {
 
 	public override void _PhysicsProcess(float delta) {
 		Vector2 relVec = Vector2.Right * Direction * Speed * delta;
-		var collisionCheck = MoveAndCollide(relVec, true, true, true);
-		if (collisionCheck != null) {
-			SetCollisionMaskBit(Lane, true);
+		if (Advancing) {
+			var collisionCheck = MoveAndCollide(relVec, true, true, true);
+			if (collisionCheck != null) {
+				SetCollisionMaskBit(Lane, true);
+			}
+			if (collisionCheck == null) {
+				SetCollisionMaskBit(Lane, false);
+			}
+			MoveAndCollide(relVec);
 		}
-		if (Advancing && collisionCheck == null) {
-			MoveAndCollide(Vector2.Right * Direction * Speed * delta);
-		}
+		
 	}
 
 	public override void _Process(float delta) {
-		int inRange = Range.GetOverlappingBodies().Count;
-		if (Advancing && inRange > 0) {
-			StartAttacking();
-		}
-		if (!Advancing && inRange == 0 && !Dead) {
-			StartAdvancing();
-		}
-		if (!Advancing && inRange > 0 && !Dead && !BodyAnimationPlayer.IsPlaying()) {
-			BodyAnimationPlayer.Play("Attacking");
+		if (!Dead) { //Check if dead
+			int inRange = Range.GetOverlappingBodies().Count; //Count enemies in range
+			if (Advancing) { //Check if in advancing state
+				if (inRange > 0) StartAttacking(); //Enter attacking state if advancing and enemies are in range
+			} else { //Check if not in advancing state, aka in attacking state
+				if (!BodyAnimationPlayer.IsPlaying()) { //Check if attack is finished
+					if (inRange == 0) StartAdvancing(); //Enter advancing state if attacking is finished and no enemies are in range
+					if (inRange > 0) BodyAnimationPlayer.Play("Attacking"); //Attack again if attack is finished and enemies are in range
+				}
+			}
 		}
 	}
 
