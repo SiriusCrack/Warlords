@@ -67,8 +67,10 @@ public class Archer : Unit {
                     default: if (unit.Position.x > Target.Position.x) Target = unit; break;
                 }
             }
-            Tween.InterpolateProperty(Hand, "rotation", Hand.Rotation, Aim(), 0.7f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
-            Tween.Start();
+            SceneTreeTween tween = CreateTween();
+            tween.TweenProperty(Hand, "rotation", Aim(), 0.7f);
+            tween.SetTrans(Tween.TransitionType.Cubic);
+            tween.SetEase(Tween.EaseType.Out);
         }
     }
 
@@ -77,7 +79,9 @@ public class Archer : Unit {
         if (Target != null) {
             Weapon.Shoot();
         }
-        Tween.InterpolateProperty(Hand, "rotation", Hand.Rotation, HandRestAngle, 0.3f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
-        Tween.Start();
+        SceneTreeTween tween = CreateTween();
+        tween.TweenProperty(Hand, "rotation", HandRestAngle, 0.3f);
+        tween.SetTrans(Tween.TransitionType.Cubic);
+        tween.SetEase(Tween.EaseType.Out);
     }
 }

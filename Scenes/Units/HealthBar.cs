@@ -4,12 +4,11 @@ using System;
 public class HealthBar : Control {
     TextureProgress UnderBar;
     TextureProgress OverBar;
-    Tween Tween;
+    // SceneTreeTween Tween;
 
     public override void _Ready() {
         UnderBar = GetNode<TextureProgress>("Under");
         OverBar = GetNode<TextureProgress>("Over");
-        Tween = GetNode<Tween>("Tween");
     }
 
     public void SetMaxHealth(int health) {
@@ -24,7 +23,9 @@ public class HealthBar : Control {
             Visible = true;
         }
         OverBar.Value = health;
-        Tween.InterpolateProperty(UnderBar, "value", UnderBar.Value, health, 0.5f, Tween.TransitionType.Sine, Tween.EaseType.InOut);
-        Tween.Start();
+        SceneTreeTween tween = CreateTween();
+        tween.TweenProperty(UnderBar, "value", (float)health, 0.5f).SetEase(Godot.Tween.EaseType.InOut);
+        // Tween.InterpolateProperty(UnderBar, "value", UnderBar.Value, health, 0.5f, Tween.TransitionType.Sine, Tween.EaseType.InOut);
+        // Tween.Start();
     }
 }
