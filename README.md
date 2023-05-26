@@ -1,7 +1,7 @@
 # Warlords
 This is a game loosely inspired by the "Warlords" flash game built with the Godot Game Engine.
 
-This is an ongoing project, in part to improve my skills with object-oriented design, documentation, and design, especially in context of a large project.
+This is an ongoing project, in part to improve my skills with object-oriented design, documentation, and long-term planning, especially in context of a large project.
 
 A playable version can be found here -
 https://siriuscrack.itch.io/warlords-clone
